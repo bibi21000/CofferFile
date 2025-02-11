@@ -37,7 +37,7 @@ class TarZstdNaclFile(_TarZstdNaclFile):
 
 try:
     import pytest_ordering
-    DO = True
+    DO = False
 except ModuleNotFoundError:
     DO = False
 
