@@ -5,9 +5,6 @@
    :start-line: 1
 
 
-    `cofferfile.decorator`
-    `cofferfile.aes`
-
 """
 __author__ = 'bibi21000 aka Sébastien GALLET'
 __email__ = 'bibi21000@gmail.com'
@@ -357,8 +354,8 @@ class EncryptFile(BaseStream):
 
     This class only supports opening files in binary mode.
 
-    `fernetfile.zstd`
-    `fernetfile.store`
+    `cofferfile.decorator`
+    `cofferfile.aes`
 
     """
 
