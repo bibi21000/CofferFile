@@ -30,6 +30,7 @@ jobs:
             pip install .[test]
             pip install .[dev]
             pip install .[aes]
+            pip install .[zstd]
             pip install codecov-cli
       - run:
           name: Run tests
