@@ -7,10 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-- Initial release
-- Splitted from FernetFile
+### Added
+
+### Changed
+
+### Removed
+
+
+## [0.0.1] - 2025/02/11
 
 ### Added
+
+- Initial release
+- Splitted from FernetFile
 
 ### Changed
 

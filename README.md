@@ -13,11 +13,7 @@ for encrypting files with Fernet, Nacl, ...
  - look at BENCHMARK.md ... and chain :)
  - look at tests for examples
 
-This is the lib . Look at https://github.com/bibi21000/NaclFile and https://github.com/bibi21000/FernetFile
+This is the main library.
 
-## Install
-
-```
-    pip install cofferfile
-```
+Look at https://github.com/bibi21000/NaclFile and https://github.com/bibi21000/FernetFile
 
