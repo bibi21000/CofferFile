@@ -669,7 +669,9 @@ def _open_t(filename, mode="rb",
                     return encoding
                 if sys.flags.utf8_mode:
                     return "utf-8"
-                return "locale"
+                import locale
+                _, encoding=locale.getlocale()
+                return encoding
         encoding = text_encoding(encoding)
         return io.TextIOWrapper(binary_file, encoding, errors, newline)
     else:
@@ -728,7 +730,9 @@ def _open_cls(filename, mode="r",
                     return encoding
                 if sys.flags.utf8_mode:
                     return "utf-8"
-                return "locale"
+                import locale
+                _, encoding=locale.getlocale()
+                return encoding
         encoding = text_encoding(encoding)
         return io.TextIOWrapper(binary_file, encoding, errors, newline)
     else:
