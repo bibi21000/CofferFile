@@ -5,6 +5,9 @@
    :start-line: 1
 
 
+    `cofferfile.decorator`
+    `cofferfile.aes`
+
 """
 __author__ = 'bibi21000 aka Sébastien GALLET'
 __email__ = 'bibi21000@gmail.com'
@@ -21,7 +24,7 @@ if sys.version_info < (3, 10):
 else:
     from importlib.metadata import entry_points  # noqa
 
-__all__ = ["EncyptFile", "Cryptor", "open"]
+__all__ = ["EncryptFile", "Cryptor", "_open_t", "_open_cls"]
 
 READ = 'rb'
 WRITE = 'wb'

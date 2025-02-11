@@ -14,6 +14,7 @@ for encrypting files with Fernet, Nacl, ...
  - look at tests for examples
 
 This is the main library.
+Look at https://github.com/bibi21000/NaclFile and https://github.com/bibi21000/FernetFile.
 
-Look at https://github.com/bibi21000/NaclFile and https://github.com/bibi21000/FernetFile
+Look at documentation : https://bibi21000.github.io/CofferFile.
 

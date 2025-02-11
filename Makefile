@@ -5,6 +5,8 @@ venv:
 	python3.12 -m venv venv
 	./venv/bin/pip install -e .
 	./venv/bin/pip install .[test]
+	./venv/bin/pip install .[build]
+	./venv/bin/pip install .[doc]
 	./venv/bin/pip install .[zstd]
 	./venv/bin/pip install .[store]
 	./venv/bin/pip install .[pynacl]
@@ -22,18 +24,18 @@ testpypi:
 	./venv/bin/python3 -m twine upload --repository testpypi --verbose dist/*
 
 doc:
-	./venv/bin/pdoc --output-directory docs fernetfile/zstd.py fernetfile/store.py fernetfile/__init__.py
+	./venv/bin/pdoc --output-directory docs cofferfile/aes.py cofferfile/decorator.py cofferfile/__init__.py
 
 pypi:
 	./venv/bin/python3 -m twine upload --repository pypi --verbose dist/*
 
 ruff:
-	./venv/bin/ruff check fernetfile/
+	./venv/bin/ruff check cofferfile/
 
 bandit:
-	./venv/bin/bandit -r fernetfile
+	./venv/bin/bandit -r cofferfile
 
-#~ tests: tests/test_fernetfile_fernet.py tests/test_naclfile_fernet.py
+#~ tests: tests/test_cofferfile_fernet.py tests/test_naclfile_fernet.py
 tests:
 	./venv/bin/pytest  --random-order -n auto --ignore=tests/test_benchmark.py tests/
 
