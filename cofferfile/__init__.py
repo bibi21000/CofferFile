@@ -15,7 +15,11 @@ import struct
 import builtins
 import io
 import logging
-from importlib.metadata import entry_points
+
+if sys.version_info < (3, 10):
+    from importlib_metadata import entry_points  # noqa
+else:
+    from importlib.metadata import entry_points  # noqa
 
 __all__ = ["EncyptFile", "Cryptor", "open"]
 
