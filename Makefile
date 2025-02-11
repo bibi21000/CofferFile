@@ -33,7 +33,8 @@ ruff:
 bandit:
 	./venv/bin/bandit -r fernetfile
 
-tests: tests/test_fernetfile_fernet.py tests/test_naclfile_fernet.py
+#~ tests: tests/test_fernetfile_fernet.py tests/test_naclfile_fernet.py
+tests:
 	./venv/bin/pytest  --random-order -n auto --ignore=tests/test_benchmark.py tests/
 
 benchmark:

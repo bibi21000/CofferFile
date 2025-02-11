@@ -4,7 +4,7 @@
 __author__ = 'bibi21000 aka Sébastien GALLET'
 __email__ = 'bibi21000@gmail.com'
 
-from . import EncryptFile, Cryptor
+from . import EncryptFile, Cryptor, _open_t
 from . import WRITE_BUFFER_SIZE, CHUNK_SIZE, READ, WRITE, APPEND, EXCLUSIVE # noqa F401
 from .decorator import reify
 
@@ -68,3 +68,32 @@ class AesFile(EncryptFile):
     def __repr__(self):
         s = repr(self.myfileobj)
         return '<AesFile ' + s[1:-1] + ' ' + hex(id(self)) + '>'
+
+def open(filename, mode="rb", fernet_key=None,
+         encoding=None, errors=None, newline=None,
+         chunk_size=CHUNK_SIZE,
+         key=None, iv=None):
+    """Open a Fernet file in binary or text mode.
+
+    The filename argument can be an actual filename (a str or bytes object), or
+    an existing file object to read from or write to.
+
+    The mode argument can be "r", "rb", "w", "wb", "x", "xb", "a" or "ab" for
+    binary mode, or "rt", "wt", "xt" or "at" for text mode. The default mode is
+    "rb".
+
+    For binary mode, this function is equivalent to the FernetFile constructor:
+    FernetFile(filename, mode, fernet_key). In this case, the encoding, errors
+    and newline arguments must not be provided.
+
+    For text mode, a FernetFile object is created, and wrapped in an
+    io.TextIOWrapper instance with the specified encoding, error handling
+    behavior, and line ending(s).
+
+    Encryption is done by chunks to reduce memory footprint. The default
+    chunk_size is 64KB.
+    """
+    return _open_t(filename, mode=mode,
+         encoding=encoding, errors=errors, newline=newline,
+         chunk_size=chunk_size,
+         cryptor='aes', key=key, iv=iv)
