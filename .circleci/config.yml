@@ -27,7 +27,9 @@ jobs:
           name: Install dependencies from pyproject.toml
           command: |
             pip install .
-            pip install .[dev]
+            pip install fernetfile@git+https://github.com/bibi21000/FernetFile
+            pip install naclfile@git+https://github.com/bibi21000/NaclFile
+            pip install pycoffer@git+https://github.com/bibi21000/PyCoffer
             pip install .[aes]
             pip install .[nacl]
             pip install .[fernet]
@@ -57,7 +59,9 @@ jobs:
           name: Install dependencies from pyproject.toml
           command: |
             pip install .
-            pip install .[dev]
+            pip install fernetfile@git+https://github.com/bibi21000/FernetFile
+            pip install naclfile@git+https://github.com/bibi21000/NaclFile
+            pip install pycoffer@git+https://github.com/bibi21000/PyCoffer
             pip install .[zstd]
             pip install .[aes]
             pip install .[pynacl]
