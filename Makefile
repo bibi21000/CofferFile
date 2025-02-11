@@ -10,6 +10,9 @@ venv:
 	./venv/bin/pip install .[pynacl]
 	./venv/bin/pip install .[aes]
 	./venv/bin/pip install .[cli]
+	./venv/bin/pip install ../FernetFile .
+	./venv/bin/pip install ../NaclFile .
+	./venv/bin/pip install ../PyCoffer .
 
 build:
 	rm -rf dist
@@ -34,4 +37,5 @@ tests:
 	./venv/bin/pytest  --random-order -n auto --ignore=tests/test_benchmark.py tests/
 
 benchmark:
+	./venv/bin/pip install .[benchmark]
 	./venv/bin/pytest tests/test_benchmark.py

@@ -19,7 +19,7 @@ import pytest
 from fernetfile.zstd import FernetFile as _ZstdFernetFile, CParameter, open as zstd_open
 import naclfile
 from naclfile import NaclFile
-from naclfile.zstd import NaclFile as _ZstdNaclFile
+from naclfile.zstd import NaclFile as _ZstdNaclFile, open as naclz_open
 from naclfile.tar import TarFile as _TarZstdNaclFile
 from cofferfile.aes import AesFile
 from fernetfile.tar import TarFile as TarZstdFernetFile
@@ -410,27 +410,33 @@ def test_benchmark_fstore_header(random_path):
     ('genindex-all.html', Fernet.generate_key(), None, None, 5),
     ('genindex-all.html', Fernet.generate_key(), zstd_open, {'fernet_key':Fernet.generate_key()}, 5),
     ('genindex-all.html', Fernet.generate_key(), fernetfile.open, {'fernet_key':Fernet.generate_key()}, 5),
+    ('genindex-all.html', Fernet.generate_key(), naclz_open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 5),
     ('genindex-all.html', Fernet.generate_key(), naclfile.open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 5),
     ('genindex-all.html', Fernet.generate_key(), None, None, 20),
     ('genindex-all.html', Fernet.generate_key(), zstd_open, {'fernet_key':Fernet.generate_key()}, 20),
     ('genindex-all.html', Fernet.generate_key(), fernetfile.open, {'fernet_key':Fernet.generate_key()}, 20),
+    ('genindex-all.html', Fernet.generate_key(), naclz_open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 20),
     ('genindex-all.html', Fernet.generate_key(), naclfile.open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 20),
     ('searchindex.js', Fernet.generate_key(), None, None, 5),
     ('searchindex.js', Fernet.generate_key(), zstd_open, {'fernet_key':Fernet.generate_key()}, 5),
     ('searchindex.js', Fernet.generate_key(), fernetfile.open, {'fernet_key':Fernet.generate_key()}, 5),
+    ('searchindex.js', Fernet.generate_key(), naclz_open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 5),
     ('searchindex.js', Fernet.generate_key(), naclfile.open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 5),
     ('searchindex.js', Fernet.generate_key(), None, None, 20),
     ('searchindex.js', Fernet.generate_key(), zstd_open, {'fernet_key':Fernet.generate_key()}, 20),
     ('searchindex.js', Fernet.generate_key(), fernetfile.open, {'fernet_key':Fernet.generate_key()}, 20),
+    ('searchindex.js', Fernet.generate_key(), naclz_open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 20),
     ('searchindex.js', Fernet.generate_key(), naclfile.open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 20),
     ('library.pdf', Fernet.generate_key(), None, None, 5),
     ('library.pdf', Fernet.generate_key(), zstd_open, {'fernet_key':Fernet.generate_key()}, 5),
     ('library.pdf', Fernet.generate_key(), fernetfile.open, {'fernet_key':Fernet.generate_key()}, 5),
+    ('library.pdf', Fernet.generate_key(), naclz_open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 5),
     ('library.pdf', Fernet.generate_key(), naclfile.open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 5),
     ('library.pdf', Fernet.generate_key(), None, None, 20),
     ('library.pdf', Fernet.generate_key(), zstd_open, {'fernet_key':Fernet.generate_key()}, 20),
     ('library.pdf', Fernet.generate_key(), fernetfile.open, {'fernet_key':Fernet.generate_key()}, 20),
     ('library.pdf', Fernet.generate_key(), naclfile.open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 20),
+    ('library.pdf', Fernet.generate_key(), naclz_open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 20),
 ])
 def test_benchmark_fstore(random_path, dt, key, secure_open, secure_params, nb_doc):
     dataf = os.path.join(random_path, 'test.frnt')
@@ -470,9 +476,11 @@ def test_benchmark_fstore(random_path, dt, key, secure_open, secure_params, nb_d
                 datar = ff.read()
             assert data == datar
     if secure_open == zstd_open:
-        sopen = 'zstd'
+        sopen = 'frnz'
     elif secure_open == fernetfile.open:
         sopen = 'frnt'
+    elif secure_open == naclz_open:
+        sopen = 'nacz'
     elif secure_open == naclfile.open:
         sopen = 'nacl'
     else:
