@@ -12,8 +12,8 @@ maintainers = [
 ]
 packages = ["cofferfile"]
 dependencies = [
-  "cryptography >= 43.0.0",
-  "importlib_metadata == 4.6.4; python_version < 3.10",
+  'cryptography >= 43.0.0',
+  'importlib_metadata == 4.6.4; python_version < "3.10"',
 ]
 classifiers = [
   # How mature is this project? Common values are
