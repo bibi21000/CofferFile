@@ -16,7 +16,6 @@ import builtins
 import io
 import logging
 from importlib.metadata import entry_points
-from cryptography.fernet import Fernet
 
 __all__ = ["EncyptFile", "Cryptor", "open"]
 
