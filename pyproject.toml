@@ -49,6 +49,9 @@ dev = [
        "pycoffer@git+https://github.com/bibi21000/PyCoffer",
        ]
 build = ["build", 'twine']
+fernet = ["cryptography>=43.0.0",]
+pynacl = ["PyNaCl"]
+aes = ["pycryptodome"]
 zstd = ["pyzstd"]
 store = ["pyzstd", "filelock"]
 cli = ["pyzstd", "filelock", "click"]
