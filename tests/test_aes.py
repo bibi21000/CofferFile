@@ -33,7 +33,7 @@ except ModuleNotFoundError:
         (1024 * 10, 1024 * 10), (1024 * 10, 1024 * 10 + 7), (1024 * 10, 1024 * 10 + 3),
         (1024 * 100, 1024 * 10), (1024 * 100, 1024 * 10 + 9), (1024 * 100, 1024 * 10 + 11),
     ])
-def test_buffer_fernet_file(random_path, random_name, chunk_size, file_size):
+def test_buffer_aes_file(random_path, random_name, chunk_size, file_size):
 
     key = b'Sixteen byte keySixteen byte key'
     iv = b'Sixteen byte key'
