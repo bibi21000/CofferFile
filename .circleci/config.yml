@@ -29,6 +29,9 @@ jobs:
             pip install .
             pip install .[dev]
             pip install .[aes]
+            pip install .[nacl]
+            pip install .[fernet]
+            pip install .[cli]
             pip install .[zstd]
             pip install .[test]
             pip install codecov-cli
@@ -55,8 +58,12 @@ jobs:
           command: |
             pip install .
             pip install .[dev]
-            pip install .[aes]
             pip install .[zstd]
+            pip install .[aes]
+            pip install .[pynacl]
+            pip install .[fernet]
+            pip install .[store]
+            pip install .[cli]
             pip install .[test]
             pip install codecov-cli
       - run:
