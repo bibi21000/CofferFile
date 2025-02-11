@@ -43,6 +43,10 @@ aes = "cofferfile.aes:AesCryptor"
 
 [project.optional-dependencies]
 test = ["pytest", "coverage[toml]", "pytest-cov", "pytest-xdist", "pytest-random-order", "ruff", "bandit"]
+dev = ["cofferfile@git+https://github.com/bibi21000/FernetFile",
+       "naclfile@git+https://github.com/bibi21000/NaclFile",
+       "pycoffer@git+https://github.com/bibi21000/PyCoffer",
+       ]
 build = ["build", 'twine']
 zstd = ["pyzstd"]
 fernet = ["cryptography>=43.0.0",]

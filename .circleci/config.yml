@@ -28,8 +28,7 @@ jobs:
           command: |
             pip install .
             pip install .[test]
-            pip install .[fernet]
-            pip install .[pynacl]
+            pip install .[dev]
             pip install .[aes]
             pip install codecov-cli
       - run:
