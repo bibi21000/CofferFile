@@ -8,6 +8,7 @@ import time
 from random import randbytes
 import urllib.request
 import zipfile
+import tarfile
 
 from cryptography.fernet import Fernet
 from nacl import utils
@@ -22,7 +23,7 @@ from naclfile import NaclFile
 from naclfile.zstd import NaclFile as _ZstdNaclFile, open as naclz_open
 from naclfile.tar import TarFile as _TarZstdNaclFile
 from cofferfile.aes import AesFile
-from fernetfile.tar import TarFile as TarZstdFernetFile
+from fernetfile.tar import TarFile as _TarZstdFernetFile
 from pycoffer.store import FernetStore
 from .test_chain import Bz2FernetFile, LzmaFernetFile, TarBz2FernetFile, TarLzmaFernetFile
 
@@ -35,8 +36,12 @@ class ZstdNaclFile(_ZstdNaclFile):
 class TarZstdNaclFile(_TarZstdNaclFile):
     pass
 
+class TarZstdFernetFile(_TarZstdFernetFile):
+    pass
+
 try:
     import pytest_ordering
+    # ~ DO = True
     DO = False
 except ModuleNotFoundError:
     DO = False
@@ -244,24 +249,30 @@ def test_benchmark_general(random_path, fcls, dt, buff_size, file_size):
     (TarLzmaFernetFile, 'html,js and pdf', 1024 * 16, 0),
     (TarLzmaFernetFile, 'html,js and pdf', 1024 * 256, 0),
     (TarLzmaFernetFile, 'html,js and pdf', 1024 * 1024, 0),
+    (tarfile.TarFile, 'html,js and pdf', 0, 0),
 ])
 def test_benchmark_tar(random_path, fcls, dt, buff_size, file_size):
     if fcls == TarZstdNaclFile:
         params = {
-            'secret_key': utils.random(SecretBox.KEY_SIZE)
+            'secret_key': utils.random(SecretBox.KEY_SIZE),
+            'chunk_size': buff_size,
         }
+    elif fcls == tarfile.TarFile:
+        params = { }
     elif fcls == AesFile:
         params = {
             'key': b'Sixteen byte keySixteen byte key',
             'iv': b'Sixteen byte key',
+            'chunk_size': buff_size,
         }
     else:
         params = {
-            'fernet_key': Fernet.generate_key()
+            'fernet_key': Fernet.generate_key(),
+            'chunk_size': buff_size,
         }
     dataf = os.path.join(random_path, 'test.frnt')
     time_start = time.time()
-    with fcls(dataf, mode='w', **params, chunk_size=buff_size) as ff:
+    with fcls(dataf, mode='w', **params) as ff:
         for tf in ['download.html', 'genindex-all.html', 'searchindex.js']:
             df = os.path.join('python-3.13-docs-html', tf)
             ff.add(df, tf)
@@ -290,7 +301,6 @@ def test_benchmark_tar(random_path, fcls, dt, buff_size, file_size):
         assert data == datar
     with open('BENCHMARK.md','at') as ff:
         ff.write("| %-20s | %-20s | %11.0f |  %10.0f | %10.0f | %10.2f%% | %6.2f | %6.2f |\n" % (("%s" % fcls).split('.')[-1][:-2], dt, buff_size / 1024, file_size / 1024, comp_size / 1024, comp_size / file_size * 100, time_write - time_start, time_read - time_write))
-
 
 @pytest.mark.skipif(not DO, reason="requires the pytest_ordering package")
 @pytest.mark.run(order=10)

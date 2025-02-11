@@ -164,8 +164,8 @@ class ZipFernetFile(zipfile.ZipFile):
 
 
 @pytest.mark.parametrize("buff_size, file_size", [
-    (1024 * 64, 1024 * 341 + 1),
-    (1024 * 16, 1024 * 147 + 1),
+    (1024 * 64 + 31, 1024 * 341 + 1),
+    (1024 * 16 + 33, 1024 * 147 + 1),
     ])
 def test_crypt_bz2(random_path, random_name, buff_size, file_size):
     key = Fernet.generate_key()
@@ -186,8 +186,8 @@ def test_crypt_bz2(random_path, random_name, buff_size, file_size):
 
 
 @pytest.mark.parametrize("buff_size, file_size",[
-    (1024 * 48, 1024 * 512 + 13),
-    (1024 * 8, 1024 * 158 + 13),
+    (1024 * 48 + 29, 1024 * 512 + 13),
+    (1024 * 8 + 13, 1024 * 158 + 13),
     ])
 def test_bz2_crypt(random_path, random_name, buff_size, file_size):
     key = Fernet.generate_key()
@@ -219,8 +219,8 @@ def test_bz2_crypt(random_path, random_name, buff_size, file_size):
 
 
 @pytest.mark.parametrize("buff_size, file_size", [
-    (1024 * 32, 1024 * 74 + 31),
-    (1024 * 7, 1024 * 2 + 31),
+    (1024 * 32 + 1, 1024 * 74 + 31),
+    (1024 * 7 + 9, 1024 * 2 + 31),
     ])
 def test_crypt_bz2_tar(random_path, random_name, buff_size, file_size):
     key = Fernet.generate_key()
@@ -252,8 +252,8 @@ def test_crypt_bz2_tar(random_path, random_name, buff_size, file_size):
         assert fdatae.read() == ddataf2
 
 @pytest.mark.parametrize("buff_size, file_size", [
-    (1024 * 32, 1024 * 356 + 31),
-    (1024 * 5, 1024 * 1 + 31),
+    (1024 * 32 + 87, 1024 * 356 + 31),
+    (1024 * 5 + 7, 1024 * 1 + 31),
     ])
 def test_crypt_bz2_tar_append(random_path, random_name, buff_size, file_size):
     key = Fernet.generate_key()

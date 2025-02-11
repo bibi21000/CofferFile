@@ -234,6 +234,26 @@ class Cryptor():
     def _encrypt(self, chunk):
         return chunk
 
+    def encode_meta(self, chunk_size):
+        "always return 32 (META_SIZE) bytes string"
+        ret = b''
+        ret += struct.pack('<I', chunk_size)
+        # We add blank data for later
+        for i in range(META_RESERV):
+            ret += struct.pack('<I', 0)
+        return ret
+
+    def decode_meta(self, data):
+        "Only accept 0 or 32 (META_SIZE) bytes string"
+        meta = data[:META_SIZE]
+        size_chunk = meta[:META_CHUNK]
+        if len(size_chunk) == 0:
+            return 0
+        if len(meta) != META_SIZE:
+            raise IOError("Meta informations corrupted : %s != %s" % (len(meta), META_SIZE))
+        size = struct.unpack('<I', size_chunk)[0]
+        return size
+
     def crypt(self, data):
         ret = b''
         beg = 0
@@ -246,9 +266,10 @@ class Cryptor():
             # ~ log.debug("len enc %s, chunk size %s" %
                 # ~ (len(enc), self.chunk_size))
             ret += struct.pack('<I', len(enc))
-            # We add blank data for later
+            # ~ # We add blank data for later
             for i in range(META_RESERV):
                 ret += struct.pack('<I', 0)
+            # ~ ret += self.encode_meta(len(enc))
             ret += enc
             if len(chunk) < self.chunk_size:
                 break
@@ -277,9 +298,11 @@ class Cryptor():
             data = self.unused_data + data
             self.unused_data = None
         while True:
-            size_meta = data[beg:beg + META_SIZE]
+            # ~ size_data = self.decode_meta(data[beg:])
+            # ~ size_meta = data[beg:beg + META_SIZE]
             size_struct = data[beg:beg + META_CHUNK]
             if len(size_struct) == 0:
+            # ~ if size_data == 0:
                 # ~ log.debug('len %s'%len(size_struct))
                 self.needs_input = False
                 self.eof = True
@@ -287,6 +310,8 @@ class Cryptor():
             if len(size_struct) != META_CHUNK:
                 raise IOError("Meta informations corrupted : %s != %s" % (len(size_struct), META_CHUNK))
             size_data = struct.unpack('<I', size_struct)[0]
+            # ~ size_data2 = self.decode_meta(data[beg:])
+            # ~ print(size_data, ' = ', size_data2)
             chunk = data[beg + META_SIZE:beg + size_data + META_SIZE]
 
             if len(chunk) < size_data:

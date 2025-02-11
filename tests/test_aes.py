@@ -94,6 +94,7 @@ def test_buffer_aes_open(random_path, random_name, chunk_size, file_size):
         datar = ff.read()
     assert data == datar
 
+
 @pytest.mark.skipif(not AES, reason="requires the pycryptodome library")
 def test_bad(random_path, random_name):
     key = b'Sixteen byte keySixteen byte key'
