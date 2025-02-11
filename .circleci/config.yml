@@ -32,17 +32,6 @@ jobs:
             pip install .[pynacl]
             pip install .[aes]
             pip install codecov-cli
-
-
-            build = ["build", 'twine']
-zstd = ["pyzstd"]
-pynacl = ["PyNaCl"]
-aes = ["pycryptodome"]
-store = ["pyzstd", "filelock"]
-cli = ["pyzstd", "filelock", "click"]
-benchmark = ["pytest-ordering"]
-doc = ["pdoc"]
-
       - run:
           name: Run tests
           command: pytest --cov-report xml --junitxml=pytest.<< parameters.python >>.junit.xml -o junit_family=legacy
