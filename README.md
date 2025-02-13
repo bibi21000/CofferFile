@@ -11,7 +11,6 @@ for encrypting files with Fernet, Nacl, ...
  - chainable with other python xxxFile interfaces (stream mode)
  - interface to compress/encrypt and decrypt/decompress (with pyzstd) in stream mode
  - look at BENCHMARK.md ... and chain :)
- - look at tests for examples
 
 This is the main library.
 Look at https://github.com/bibi21000/NaclFile, https://github.com/bibi21000/FernetFile

@@ -1,9 +1,9 @@
 [project]
 name = "cofferfile"
-version = "0.0.1"
+version = "0.0.2"
 requires-python = ">= 3.9"
 readme = "README.md"
-description = "A python xxxFile like ( ie GzipFile, BZ2File, ...) for manipulating encrypted files."
+description = "A python xxxFile like (ie GzipFile, BZ2File, ...) for manipulating encrypted files (Fernet, Nacl, ...)."
 authors = [
   {name = "bibi21000", email = "bibi21000@gmail.com"},
 ]
