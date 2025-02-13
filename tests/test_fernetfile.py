@@ -12,6 +12,7 @@ import cofferfile
 import fernetfile
 
 import pytest
+from .conftest import DummyFile
 
 @pytest.mark.parametrize("buff_size, file_size",
     [
@@ -220,6 +221,10 @@ def test_bad_mode(random_path, random_name):
         with fernetfile.open(dataf, mode='wb', fernet_key=None) as ff:
             ff.write(data)
 
+    with pytest.raises(TypeError):
+        with fernetfile.FernetFile(1, mode='wb', fernet_key=None) as ff:
+            ff.write(data)
+
 def test_fernetfile(random_path, random_name):
     key = Fernet.generate_key()
     data = randbytes(128)
@@ -367,4 +372,24 @@ def test_EncryptFile(random_path, random_name):
         datar = ff.read()
 
     assert data == datar
+
+    with open(dataf, "rb") as fdata:
+        with fernetfile.EncryptFile(fileobj=fdata, mode=None, cryptor='fernet', fernet_key=key) as ff:
+            datar = ff.read()
+        assert data == datar
+
+
+def test_DummyFile(random_path, random_name):
+    data = randbytes(128)
+    dataf = os.path.join(random_path, 'test_dummy_%s.frnt'%random_name)
+
+    with DummyFile(dataf, mode='wb') as ff:
+        assert repr(ff).startswith("<DummyFile ")
+        ff.write(data)
+
+    with DummyFile(dataf, mode='rb') as ff:
+        datar = ff.read()
+
+    assert data == datar
+
 

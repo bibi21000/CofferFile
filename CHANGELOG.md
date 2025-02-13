@@ -9,7 +9,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Add DummyFile test helper
+- Add new targets in benchmarks.
+
 ### Changed
+
+- Fix bug in decrypting small files with big meta
+- Allow change of container class
 
 ### Removed
 
@@ -20,7 +26,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 - Splitted from FernetFile
-
-### Changed
-
-### Removed

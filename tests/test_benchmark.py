@@ -17,6 +17,7 @@ from nacl.secret import SecretBox
 import fernetfile
 
 import pytest
+from .conftest import DummyFile
 from fernetfile.zstd import FernetFile as _ZstdFernetFile, CParameter, open as zstd_open
 import naclfile
 from naclfile import NaclFile
@@ -41,8 +42,8 @@ class TarZstdFernetFile(_TarZstdFernetFile):
 
 try:
     import pytest_ordering
-    # ~ DO = True
-    DO = False
+    DO = True
+    # ~ DO = False
 except ModuleNotFoundError:
     DO = False
 
@@ -50,7 +51,7 @@ except ModuleNotFoundError:
 @pytest.mark.skipif(not DO, reason="requires the pytest_ordering package")
 @pytest.mark.run(order=21)
 def test_benchmark_general_header(random_path):
-    with open('BENCHMARK.md','at') as ff:
+    with open('BENCHMARK.md','wt') as ff:
         ff.write("\n")
         ff.write("\n")
         ff.write("# General benchmarks\n")
@@ -70,6 +71,10 @@ def test_benchmark_general_header(random_path):
 @pytest.mark.skipif(not DO, reason="requires the pytest_ordering package")
 @pytest.mark.run(order=22)
 @pytest.mark.parametrize("fcls, dt, buff_size, file_size", [
+    (DummyFile, 'download.html', 1024 * 16, 0),
+    (DummyFile, 'genindex-all.html', 1024 * 16, 0),
+    (DummyFile, 'searchindex.js', 1024 * 16, 0),
+    (DummyFile, 'library.pdf', 1024 * 16, 0),
     (fernetfile.FernetFile, 'download.html', 1024 * 16, 0),
     (fernetfile.FernetFile, 'genindex-all.html', 1024 * 16, 0),
     (fernetfile.FernetFile, 'searchindex.js', 1024 * 16, 0),
@@ -116,6 +121,42 @@ def test_benchmark_general_header(random_path):
     # ~ (ZstdFernetFile, b'g', 1024 * 16, 1024 * 1024 * 1),
     # ~ (ZstdFernetFile, b'h', 1024 * 16, 1024 * 1024 * 10),
     # ~ (ZstdFernetFile, b'i', 1024 * 16, 1024 * 1024 * 100),
+    (DummyFile, 'download.html', 1024 * 64, 0),
+    (DummyFile, 'genindex-all.html', 1024 * 64, 0),
+    (DummyFile, 'searchindex.js', 1024 * 64, 0),
+    (DummyFile, 'library.pdf', 1024 * 64, 0),
+    (fernetfile.FernetFile, 'download.html', 1024 * 64, 0),
+    (fernetfile.FernetFile, 'genindex-all.html', 1024 * 64, 0),
+    (fernetfile.FernetFile, 'searchindex.js', 1024 * 64, 0),
+    (fernetfile.FernetFile, 'library.pdf', 1024 * 64, 0),
+    (NaclFile, 'download.html', 1024 * 64, 0),
+    (NaclFile, 'genindex-all.html', 1024 * 64, 0),
+    (NaclFile, 'searchindex.js', 1024 * 64, 0),
+    (NaclFile, 'library.pdf', 1024 * 64, 0),
+    (AesFile, 'download.html', 1024 * 64, 0),
+    (AesFile, 'genindex-all.html', 1024 * 64, 0),
+    (AesFile, 'searchindex.js', 1024 * 64, 0),
+    (AesFile, 'library.pdf', 1024 * 64, 0),
+    (Bz2FernetFile, 'download.html', 1024 * 64, 0),
+    (Bz2FernetFile, 'genindex-all.html', 1024 * 64, 0),
+    (Bz2FernetFile, 'searchindex.js', 1024 * 64, 0),
+    (Bz2FernetFile, 'library.pdf', 1024 * 64, 0),
+    (LzmaFernetFile, 'download.html', 1024 * 64, 0),
+    (LzmaFernetFile, 'genindex-all.html', 1024 * 64, 0),
+    (LzmaFernetFile, 'searchindex.js', 1024 * 64, 0),
+    (LzmaFernetFile, 'library.pdf', 1024 * 64, 0),
+    (ZstdFernetFile, 'download.html', 1024 * 64, 0),
+    (ZstdFernetFile, 'genindex-all.html', 1024 * 64, 0),
+    (ZstdFernetFile, 'searchindex.js', 1024 * 64, 0),
+    (ZstdFernetFile, 'library.pdf', 1024 * 64, 0),
+    (ZstdNaclFile, 'download.html', 1024 * 64, 0),
+    (ZstdNaclFile, 'genindex-all.html', 1024 * 64, 0),
+    (ZstdNaclFile, 'searchindex.js', 1024 * 64, 0),
+    (ZstdNaclFile, 'library.pdf', 1024 * 64, 0),
+    (DummyFile, 'download.html', 1024 * 256, 0),
+    (DummyFile, 'genindex-all.html', 1024 * 256, 0),
+    (DummyFile, 'searchindex.js', 1024 * 256, 0),
+    (DummyFile, 'library.pdf', 1024 * 256, 0),
     (fernetfile.FernetFile, 'download.html', 1024 * 256, 0),
     (fernetfile.FernetFile, 'genindex-all.html', 1024 * 256, 0),
     (fernetfile.FernetFile, 'searchindex.js', 1024 * 256, 0),
@@ -162,6 +203,10 @@ def test_benchmark_general_header(random_path):
     # ~ (ZstdFernetFile, b'g', 1024 * 256, 1024 * 1024 * 1),
     # ~ (ZstdFernetFile, b'h', 1024 * 256, 1024 * 1024 * 10),
     # ~ (ZstdFernetFile, b'i', 1024 * 256, 1024 * 1024 * 100),
+    (DummyFile, 'download.html', 1024 * 1024, 0),
+    (DummyFile, 'genindex-all.html', 1024 * 1024, 0),
+    (DummyFile, 'searchindex.js', 1024 * 1024, 0),
+    (DummyFile, 'library.pdf', 1024 * 1024, 0),
     (fernetfile.FernetFile, 'download.html', 1024 * 1024, 0),
     (fernetfile.FernetFile, 'genindex-all.html', 1024 * 1024, 0),
     (fernetfile.FernetFile, 'searchindex.js', 1024 * 1024, 0),
@@ -200,6 +245,9 @@ def test_benchmark_general(random_path, fcls, dt, buff_size, file_size):
         params = {
             'key': b'Sixteen byte keySixteen byte key',
             'iv': b'Sixteen byte key',
+        }
+    elif fcls == DummyFile:
+        params = {
         }
     else:
         params = {
@@ -303,7 +351,7 @@ def test_benchmark_tar(random_path, fcls, dt, buff_size, file_size):
         ff.write("| %-20s | %-20s | %11.0f |  %10.0f | %10.0f | %10.2f%% | %6.2f | %6.2f |\n" % (("%s" % fcls).split('.')[-1][:-2], dt, buff_size / 1024, file_size / 1024, comp_size / 1024, comp_size / file_size * 100, time_write - time_start, time_read - time_write))
 
 @pytest.mark.skipif(not DO, reason="requires the pytest_ordering package")
-@pytest.mark.run(order=10)
+@pytest.mark.run(order=30)
 def test_benchmark_zstd_header(random_path):
     with open('BENCHMARK.md','at') as ff:
         ff.write("\n")
@@ -327,7 +375,7 @@ def test_benchmark_zstd_header(random_path):
 
 # ~ @pytest.mark.skip("Manual test")
 @pytest.mark.skipif(not DO, reason="requires the pytest_ordering package")
-@pytest.mark.run(order=11)
+@pytest.mark.run(order=31)
 @pytest.mark.parametrize("fcls, dt, lvl, wrks", [
     (ZstdFernetFile, 'genindex-all.html', 9, 2),
     (ZstdFernetFile, 'genindex-all.html', 9, 8),
@@ -387,115 +435,3 @@ def test_benchmark_zstd_tar(random_path, fcls, dt, lvl, wrks):
     comp_size = os.path.getsize(dataf)
     with open('BENCHMARK.md','at') as ff:
         ff.write("| %-20s | %-20s | %3.0f | %4.0f |  %10.0f | %10.0f | %10.2f%% | %6.2f | %6.2f |\n" % (("%s" % fcls).split('.')[-1][:-2], dt, lvl, wrks, file_size / 1024, comp_size / 1024, comp_size / file_size * 100, time_write - time_start, time_read - time_write))
-
-
-@pytest.mark.skipif(not DO, reason="requires the pytest_ordering package")
-@pytest.mark.run(order=0)
-def test_benchmark_fstore_header(random_path):
-    with open('BENCHMARK.md','wt') as ff:
-        ff.write("# Benchmarks FernetStore\n")
-        ff.write("\n")
-        ff.write("Tests done with autoflush, with or without open_secure.\n")
-        ff.write("\n")
-        ff.write("WT -1, ... are the last store.add time in store\n")
-        ff.write("\n")
-        ff.write("WTime is the total write time. RTime the time spent to read\n")
-        ff.write("\n")
-        ff.write("| Data              | NbDocs | Op sec | Orig size | Crypt size | C Ratio | WTime | Rtime | WT -1 | WT -2 | WT -3 | WT -4 |\n")
-        ff.write("|:------------------|-------:|-------:|----------:|-----------:|--------:|------:|------:|------:|------:|------:|------:|\n")
-    if os.path.isfile('docpython.pdf.zip') is False:
-        urllib.request.urlretrieve("https://docs.python.org/3/archives/python-3.13-docs-pdf-a4.zip", "docpython.pdf.zip")
-        with zipfile.ZipFile('docpython.pdf.zip', 'r') as zip_ref:
-            zip_ref.extractall('.')
-    if os.path.isfile('docpython.html.zip') is False:
-        urllib.request.urlretrieve("https://docs.python.org/3/archives/python-3.13-docs-html.zip", "docpython.html.zip")
-        with zipfile.ZipFile('docpython.html.zip', 'r') as zip_ref:
-            zip_ref.extractall('.')
-
-
-# ~ @pytest.mark.skip("Manual test")
-@pytest.mark.skipif(not DO, reason="requires the pytest_ordering package")
-@pytest.mark.run(order=1)
-@pytest.mark.parametrize("dt, key, secure_open, secure_params, nb_doc", [
-    ('genindex-all.html', Fernet.generate_key(), None, None, 5),
-    ('genindex-all.html', Fernet.generate_key(), zstd_open, {'fernet_key':Fernet.generate_key()}, 5),
-    ('genindex-all.html', Fernet.generate_key(), fernetfile.open, {'fernet_key':Fernet.generate_key()}, 5),
-    ('genindex-all.html', Fernet.generate_key(), naclz_open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 5),
-    ('genindex-all.html', Fernet.generate_key(), naclfile.open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 5),
-    ('genindex-all.html', Fernet.generate_key(), None, None, 20),
-    ('genindex-all.html', Fernet.generate_key(), zstd_open, {'fernet_key':Fernet.generate_key()}, 20),
-    ('genindex-all.html', Fernet.generate_key(), fernetfile.open, {'fernet_key':Fernet.generate_key()}, 20),
-    ('genindex-all.html', Fernet.generate_key(), naclz_open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 20),
-    ('genindex-all.html', Fernet.generate_key(), naclfile.open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 20),
-    ('searchindex.js', Fernet.generate_key(), None, None, 5),
-    ('searchindex.js', Fernet.generate_key(), zstd_open, {'fernet_key':Fernet.generate_key()}, 5),
-    ('searchindex.js', Fernet.generate_key(), fernetfile.open, {'fernet_key':Fernet.generate_key()}, 5),
-    ('searchindex.js', Fernet.generate_key(), naclz_open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 5),
-    ('searchindex.js', Fernet.generate_key(), naclfile.open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 5),
-    ('searchindex.js', Fernet.generate_key(), None, None, 20),
-    ('searchindex.js', Fernet.generate_key(), zstd_open, {'fernet_key':Fernet.generate_key()}, 20),
-    ('searchindex.js', Fernet.generate_key(), fernetfile.open, {'fernet_key':Fernet.generate_key()}, 20),
-    ('searchindex.js', Fernet.generate_key(), naclz_open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 20),
-    ('searchindex.js', Fernet.generate_key(), naclfile.open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 20),
-    ('library.pdf', Fernet.generate_key(), None, None, 5),
-    ('library.pdf', Fernet.generate_key(), zstd_open, {'fernet_key':Fernet.generate_key()}, 5),
-    ('library.pdf', Fernet.generate_key(), fernetfile.open, {'fernet_key':Fernet.generate_key()}, 5),
-    ('library.pdf', Fernet.generate_key(), naclz_open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 5),
-    ('library.pdf', Fernet.generate_key(), naclfile.open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 5),
-    ('library.pdf', Fernet.generate_key(), None, None, 20),
-    ('library.pdf', Fernet.generate_key(), zstd_open, {'fernet_key':Fernet.generate_key()}, 20),
-    ('library.pdf', Fernet.generate_key(), fernetfile.open, {'fernet_key':Fernet.generate_key()}, 20),
-    ('library.pdf', Fernet.generate_key(), naclfile.open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 20),
-    ('library.pdf', Fernet.generate_key(), naclz_open, {'secret_key':utils.random(SecretBox.KEY_SIZE)}, 20),
-])
-def test_benchmark_fstore(random_path, dt, key, secure_open, secure_params, nb_doc):
-    dataf = os.path.join(random_path, 'test.frnt')
-    time_start = time.time()
-    times = []
-    file_size = 0
-    with FernetStore(dataf, mode='w', fernet_key=key,
-            secure_open=secure_open, secure_params=secure_params) as ff:
-        for i in range(nb_doc):
-            if dt in ['download.html', 'genindex-all.html', 'searchindex.js']:
-                df = os.path.join('python-3.13-docs-html', dt)
-                ff.add(df, dt + '%s'%i)
-                file_size += os.path.getsize(df)
-            elif dt in [ 'library.pdf']:
-                df = os.path.join('docs-pdf', dt)
-                ff.add(df, dt + '%s'%i)
-                file_size += os.path.getsize(df)
-            times.append(time.time())
-    time_write = time.time()
-    with FernetStore(dataf, "rb", fernet_key=key,
-            secure_open=secure_open, secure_params=secure_params) as ff:
-        ff.extractall('extract_tar')
-    time_read = time.time()
-    # ~ assert data == datar
-    comp_size = os.path.getsize(dataf)
-    for i in range(nb_doc):
-        if dt in ['download.html', 'genindex-all.html', 'searchindex.js']:
-            with open(os.path.join('python-3.13-docs-html', dt),'rb') as ff:
-                data = ff.read()
-            with open(os.path.join('extract_tar', dt + '%s'%i),'rb') as ff:
-                datar = ff.read()
-            assert data == datar
-        elif dt in [ 'library.pdf']:
-            with open(os.path.join('docs-pdf', dt),'rb') as ff:
-                data = ff.read()
-            with open(os.path.join('extract_tar', dt + '%s'%i),'rb') as ff:
-                datar = ff.read()
-            assert data == datar
-    if secure_open == zstd_open:
-        sopen = 'frnz'
-    elif secure_open == fernetfile.open:
-        sopen = 'frnt'
-    elif secure_open == naclz_open:
-        sopen = 'nacz'
-    elif secure_open == naclfile.open:
-        sopen = 'nacl'
-    else:
-        sopen = 'None'
-    with open('BENCHMARK.md','at') as ff:
-        ff.write("|%-18s | %6.0f | %-6s | %9.0f |  %9.0f | %7.2f | %5.2f | %5.2f | %5.2f | %5.2f | %5.2f | %5.2f |\n" %
-        (dt, nb_doc, sopen, file_size / 1024, comp_size / 1024, comp_size / file_size * 100,
-        time_write - time_start, time_read - time_write, times[-1] - times[-2], times[-2] - times[-3], times[-3] - times[-4], times[-4] - times[-5]))

@@ -4,7 +4,6 @@
 .. include:: ../README.md
    :start-line: 1
 
-
 """
 __author__ = 'bibi21000 aka Sébastien GALLET'
 __email__ = 'bibi21000@gmail.com'
@@ -45,6 +44,19 @@ WRITE_BUFFER_SIZE = 5 * BUFFER_SIZE
 log = logging.getLogger('fernetfile')
 
 
+if hasattr(io, "text_encoding"):
+    text_encoding = io.text_encoding
+else:
+    # For python 3.9
+    def text_encoding(encoding) -> str:
+        if encoding is not None:
+            return encoding
+        if sys.flags.utf8_mode:
+            return "utf-8"
+        import locale
+        _, encoding=locale.getlocale()
+        return encoding
+
 class BaseStream(io.BufferedIOBase):
     """Mode-checking helper functions."""
 
@@ -74,6 +86,7 @@ class DecryptReader(io.BufferedIOBase):
 
     def __init__(self, fp, decrypt_factory, buffer_size=BUFFER_SIZE,
             trailing_error=(), **decrypt_args):
+        """"""
         self._fp = fp
         self.buffer_size = buffer_size
         self._eof = False
@@ -97,16 +110,20 @@ class DecryptReader(io.BufferedIOBase):
         # ~ self._old_data = None
 
     def close(self):
+        """"""
         self._decryptor = None
         return super().close()
 
     def seekable(self):
+        """"""
         return self._fp.seekable()
 
     def readable(self):
+        """"""
         return self._fp.readable()
 
     def readinto(self, b):
+        """"""
         # ~ print(type(b))
         with memoryview(b) as view, view.cast("B") as byte_view:
             data = self.read(len(byte_view))
@@ -120,6 +137,7 @@ class DecryptReader(io.BufferedIOBase):
         return len(data)
 
     def read(self, size=-1):
+        """"""
         if size < 0:
             return self.readall()
         if not size or self._eof:
@@ -168,6 +186,7 @@ class DecryptReader(io.BufferedIOBase):
         return data
 
     def readall(self):
+        """"""
         chunks = []
         # sys.maxsize means the max length of output buffer is unlimited,
         # so that the whole input buffer can be decrypted within one
@@ -179,12 +198,14 @@ class DecryptReader(io.BufferedIOBase):
 
     # Rewind the file to the beginning of the data stream.
     def rewind(self):
+        """"""
         self._fp.seek(0)
         self._eof = False
         self._pos = 0
         self._decryptor = self._decrypt_factory(**self._decrypt_args)
 
     def seek(self, offset, whence=io.SEEK_SET):
+        """"""
         # Recalculate offset as an absolute file position.
         if whence == io.SEEK_SET:
             pass
@@ -222,6 +243,7 @@ class DecryptReader(io.BufferedIOBase):
 class Cryptor():
 
     def __init__(self, chunk_size=CHUNK_SIZE):
+        """"""
         self.chunk_size = chunk_size
         self._marks = 0
         self.eof = False
@@ -235,7 +257,9 @@ class Cryptor():
         return chunk
 
     def encode_meta(self, chunk_size):
-        "always return 32 (META_SIZE) bytes string"
+        """Always return 32 (META_SIZE) bytes string
+        Bug !!! need more tests
+        """
         ret = b''
         ret += struct.pack('<I', chunk_size)
         # We add blank data for later
@@ -244,17 +268,21 @@ class Cryptor():
         return ret
 
     def decode_meta(self, data):
-        "Only accept 0 or 32 (META_SIZE) bytes string"
+        """Decode metadata from data and return length of data.
+        -1 no data to decode
+        -2 means not enough data
+        """
         meta = data[:META_SIZE]
         size_chunk = meta[:META_CHUNK]
         if len(size_chunk) == 0:
-            return 0
-        if len(meta) != META_SIZE:
-            raise IOError("Meta informations corrupted : %s != %s" % (len(meta), META_SIZE))
+            return -1
+        if len(meta) < META_SIZE:
+            return -2
         size = struct.unpack('<I', size_chunk)[0]
         return size
 
     def crypt(self, data):
+        """"""
         ret = b''
         beg = 0
         while True:
@@ -265,27 +293,30 @@ class Cryptor():
             self._marks += 1
             # ~ log.debug("len enc %s, chunk size %s" %
                 # ~ (len(enc), self.chunk_size))
-            ret += struct.pack('<I', len(enc))
+            # ~ ret += struct.pack('<I', len(enc))
             # ~ # We add blank data for later
-            for i in range(META_RESERV):
-                ret += struct.pack('<I', 0)
-            # ~ ret += self.encode_meta(len(enc))
+            # ~ for i in range(META_RESERV):
+                # ~ ret += struct.pack('<I', 0)
+            ret += self.encode_meta(len(enc))
             ret += enc
             if len(chunk) < self.chunk_size:
                 break
             beg += self.chunk_size
 
-        log.debug("CofferEncryptor.compress : len ret %s, chunk size %s, marks %s" %
-            (len(ret), self.chunk_size, self._marks))
+        # ~ log.debug("CofferEncryptor.compress : len ret %s, chunk size %s, marks %s" %
+            # ~ (len(ret), self.chunk_size, self._marks))
         return ret
 
     def flush(self):
+        """"""
         return b''
 
     def _decrypt(self, chunk):
+        """"""
         return chunk
 
     def decrypt(self, data, size=-1):
+        """"""
         beg = 0
         ret = b""
         size_data = None
@@ -298,21 +329,23 @@ class Cryptor():
             data = self.unused_data + data
             self.unused_data = None
         while True:
-            # ~ size_data = self.decode_meta(data[beg:])
+            size_data = self.decode_meta(data[beg:])
             # ~ size_meta = data[beg:beg + META_SIZE]
-            size_struct = data[beg:beg + META_CHUNK]
-            if len(size_struct) == 0:
-            # ~ if size_data == 0:
+            # ~ size_struct = data[beg:beg + META_CHUNK]
+            # ~ if len(size_struct) == 0:
+            if size_data == -1:
                 # ~ log.debug('len %s'%len(size_struct))
                 self.needs_input = False
                 self.eof = True
                 break
-            if len(size_struct) != META_CHUNK:
-                raise IOError("Meta informations corrupted : %s != %s" % (len(size_struct), META_CHUNK))
-            size_data = struct.unpack('<I', size_struct)[0]
+            if size_data == -2:
+            # ~ if len(size_struct) < META_CHUNK:
+                self.unused_data = data[beg:]
+                break
+            # ~ size_data = struct.unpack('<I', size_struct)[0]
             # ~ size_data2 = self.decode_meta(data[beg:])
             # ~ print(size_data, ' = ', size_data2)
-            chunk = data[beg + META_SIZE:beg + size_data + META_SIZE]
+            chunk = data[beg + META_SIZE:beg + META_SIZE + size_data]
 
             if len(chunk) < size_data:
                 self.unused_data = data[beg:]
@@ -333,18 +366,23 @@ class Cryptor():
             self.unsent_data = b''
         return ret
 
+
 class _WriteBufferStream(io.RawIOBase):
     """Minimal object to pass WriteBuffer flushes into CofferFile"""
     def __init__(self, fernet_file):
+        """"""
         self.fernet_file = fernet_file
 
     def write(self, data):
+        """"""
         return self.fernet_file._write_raw(data)
 
     def seekable(self):
+        """"""
         return False
 
     def writable(self):
+        """"""
         return True
 
 
@@ -360,8 +398,8 @@ class EncryptFile(BaseStream):
     """
 
     myfileobj = None
-    """ Overridden with internal file object to be closed, if only a filename
-    is passed in """
+    """Overridden with internal file object to be closed, if only a filename
+    is passed in"""
 
     def __init__(self, filename=None, mode=None, fileobj=None,
             chunk_size=CHUNK_SIZE, write_buffer_size=WRITE_BUFFER_SIZE,
@@ -441,11 +479,13 @@ class EncryptFile(BaseStream):
         # ~ return self._buffer.raw._last_mtime
 
     def __repr__(self):
+        """"""
         s = repr(self.myfileobj)
         return '<EncryptFile ' + s[1:-1] + ' ' + hex(id(self)) + '>'
 
     @classmethod
     def cryptor_factory(self, name=None):
+        """"""
         if name is None:
             return entry_points(group='cofferfile.cryptor')
         else:
@@ -641,6 +681,7 @@ class EncryptFile(BaseStream):
         self._check_not_closed()
         return self._buffer.readline(size)
 
+
 def _open_t(filename, mode="rb",
          encoding=None, errors=None, newline=None,
          chunk_size=CHUNK_SIZE,
@@ -685,22 +726,11 @@ def _open_t(filename, mode="rb",
         raise TypeError("filename must be a str or bytes object, or a file")
 
     if "t" in mode:
-        if hasattr(io, "text_encoding"):
-            text_encoding = io.text_encoding
-        else:
-            # For python 3.9
-            def text_encoding(encoding) -> str:
-                if encoding is not None:
-                    return encoding
-                if sys.flags.utf8_mode:
-                    return "utf-8"
-                import locale
-                _, encoding=locale.getlocale()
-                return encoding
         encoding = text_encoding(encoding)
         return io.TextIOWrapper(binary_file, encoding, errors, newline)
     else:
         return binary_file
+
 
 def _open_cls(filename, mode="r",
          encoding=None, errors=None, newline=None,
@@ -746,18 +776,6 @@ def _open_cls(filename, mode="r",
         raise TypeError("filename must be a str or bytes object, or a file")
 
     if "t" in mode:
-        if hasattr(io, "text_encoding"):
-            text_encoding = io.text_encoding
-        else:
-            # For python 3.9
-            def text_encoding(encoding) -> str:
-                if encoding is not None:
-                    return encoding
-                if sys.flags.utf8_mode:
-                    return "utf-8"
-                import locale
-                _, encoding=locale.getlocale()
-                return encoding
         encoding = text_encoding(encoding)
         return io.TextIOWrapper(binary_file, encoding, errors, newline)
     else:

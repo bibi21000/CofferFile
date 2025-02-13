@@ -1,8 +1,14 @@
 #!/usr/bin/make -f
+-include makefile.local
+
+ifndef PYTHON
+PYTHON:=python3
+endif
+
 .PHONY: venv tests
 
 venv:
-	python3.12 -m venv venv
+	${PYTHON} -m venv venv
 	./venv/bin/pip install -e .
 	./venv/bin/pip install .[test]
 	./venv/bin/pip install .[build]
@@ -40,15 +46,17 @@ tests:
 	./venv/bin/pytest  --random-order -n auto --ignore=tests/test_benchmark.py tests/
 
 benchmark:
-	./venv/bin/pip install .[benchmark]
+#~ 	./venv/bin/pip install .[benchmark]
 	./venv/bin/pytest tests/test_benchmark.py
 
 tests/test_fernetfile_fernet.py:
 	cd tests && ln -s ../../FernetFile/tests/test_fernet.py test_fernetfile_fernet.py
 	cd tests && ln -s ../../FernetFile/tests/test_tar.py test_fernetfile_tar.py
 	cd tests && ln -s ../../FernetFile/tests/test_zstd.py test_fernetfile_zstd.py
+	cd tests && ln -s ../../FernetFile/tests/test_small_files.py test_fernetfile_small_files.py
 
-tests/test_naclfile_fernet.py:
-	cd tests && ln -s ../../NaclFile/tests/test_fernet.py test_nacl_fernet.py
-	cd tests && ln -s ../../NaclFile/tests/test_tar.py test_nacl_tar.py
-	cd tests && ln -s ../../NaclFile/tests/test_zstd.py test_nacl_zstd.py
+tests/test_naclfile_pynacl.py:
+	cd tests && ln -s ../../NaclFile/tests/test_pynacl.py test_naclfile_pynacl.py
+	cd tests && ln -s ../../NaclFile/tests/test_tar.py test_naclfile_tar.py
+	cd tests && ln -s ../../NaclFile/tests/test_zstd.py test_naclfile_zstd.py
+	cd tests && ln -s ../../NaclFile/tests/test_small_files.py test_naclfile_small_files.py
