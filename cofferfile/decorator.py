@@ -6,9 +6,6 @@ From pyramid : https://github.com/Pylons/pyramid/blob/main/src/pyramid/decorator
 """
 __author__ = 'bibi21000 aka Sébastien GALLET'
 __email__ = 'bibi21000@gmail.com'
-import logging
-
-log = logging.getLogger( __name__ )
 
 class reify:
     """Use as a class method decorator.  It operates almost exactly like the
@@ -50,11 +47,7 @@ class reify:
     def __get__(self, inst, objtype=None):
         if inst is None:
             return self
-        try:
-            val = self.wrapped(inst)
-        except Exception:
-            log.exception("Exception while reifying %s" % inst)
-            raise
+        val = self.wrapped(inst)
         # reify is a non-data-descriptor which is leveraging the fact
         # that it is not invoked if the equivalent attribute is defined in the
         # object's dict, so the setattr here effectively hides this descriptor

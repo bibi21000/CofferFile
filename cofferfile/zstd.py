@@ -21,3 +21,6 @@ def clean_level_or_option(level_or_option, mode='r'):
             if not isinstance(i, CParameter):
                 continue
             ret[i] = level_or_option[i]
+    if len(ret) == 0:
+        return
+    return ret

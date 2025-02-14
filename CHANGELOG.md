@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- add function to clean pystd options
+- Add function to clean pystd options
 
 ### Changed
 

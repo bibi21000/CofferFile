@@ -10,6 +10,7 @@ import struct
 
 from cryptography.fernet import Fernet
 
+from cofferfile.zstd import clean_level_or_option
 import fernetfile
 
 import pytest
@@ -276,3 +277,25 @@ def test_zst_bad_mode(random_path, random_name):
     with pytest.raises(TypeError):
         with zstd_open(dataf, mode='wb', fernet_key=key, zstd_dict=1) as ff:
             ff.write(data)
+
+def test_clean_level_or_option(random_path, random_name):
+
+    assert clean_level_or_option({}, mode="r") is None
+    assert clean_level_or_option(level_or_option = {
+        pyzstd.CParameter.compressionLevel : 12,
+        pyzstd.CParameter.nbWorkers : 2
+    }, mode="r") is None
+    assert len(clean_level_or_option(level_or_option = {
+        pyzstd.DParameter.windowLogMax : 24
+    }, mode="r")) == 1
+    assert clean_level_or_option({}, mode="w") is None
+    assert len(clean_level_or_option(level_or_option = {
+        pyzstd.CParameter.compressionLevel : 12,
+        pyzstd.CParameter.nbWorkers : 2
+    }, mode="w")) == 2
+    assert clean_level_or_option(level_or_option = {
+        pyzstd.DParameter.windowLogMax : 24
+    }, mode="w") is None
+
+
+
