@@ -629,11 +629,11 @@ class EncryptFile(BaseStream):
         return self.mode == WRITE
 
     def seekable(self):
-        """Return whether the file supports seeking."""
+        """Return whether the file supports seeking. (experimental)"""
         return self.readable() and self._buffer.seekable()
 
     def seek(self, offset, whence=io.SEEK_SET):
-        """Change the file position.
+        """Change the file position. (experimental)
 
         The new position is specified by offset, relative to the
         position indicated by whence. Values for whence are:

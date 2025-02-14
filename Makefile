@@ -60,3 +60,9 @@ tests/test_naclfile_pynacl.py:
 	cd tests && ln -s ../../NaclFile/tests/test_tar.py test_naclfile_tar.py
 	cd tests && ln -s ../../NaclFile/tests/test_zstd.py test_naclfile_zstd.py
 	cd tests && ln -s ../../NaclFile/tests/test_small_files.py test_naclfile_small_files.py
+
+tests/test_pycoffer_market.py:
+	cd tests && ln -s ../../PyCoffer/tests/test_market.py test_pycoffer_market.py
+	cd tests && ln -s ../../PyCoffer/tests/test_bank.py test_pycoffer_bank.py
+	cd tests && ln -s ../../PyCoffer/tests/test_store.py test_pycoffer_store.py
+	cd tests && ln -s ../../PyCoffer/tests/test_coffer.py test_pycoffer_coffer.py
