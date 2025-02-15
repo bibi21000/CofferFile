@@ -41,8 +41,7 @@ BUFFER_SIZE = 1024 * 64
 CHUNK_SIZE = BUFFER_SIZE - META_SIZE
 WRITE_BUFFER_SIZE = 5 * BUFFER_SIZE
 
-log = logging.getLogger('fernetfile')
-
+log = logging.getLogger('cofferfile')
 
 if hasattr(io, "text_encoding"):
     text_encoding = io.text_encoding
