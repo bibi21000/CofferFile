@@ -10,7 +10,7 @@ import struct
 
 from cryptography.fernet import Fernet
 
-from cofferfile.zstd import clean_level_or_option
+from cofferfile.zstd import clean_level_or_option, ZstdTarFile
 import fernetfile
 
 import pytest
@@ -297,5 +297,16 @@ def test_clean_level_or_option(random_path, random_name):
         pyzstd.DParameter.windowLogMax : 24
     }, mode="w") is None
 
+def test_zst_tar(random_path, random_name):
+    datafsrc = os.path.join(random_path, 'test%s.dat'%random_name)
+    with open(datafsrc, 'wb') as f:
+        for i in range(1024):
+            f.write(randbytes(1024 * 5 + i))
 
+    with ZstdTarFile('%s/titi.zstt'%random_path, 'w') as r:
+        r.add(datafsrc, 'test.dat')
+
+    with pytest.raises(TypeError):
+        with ZstdTarFile('%s/titi.zstt'%random_path, 'w', titi=None) as r:
+            r.add(datafsrc, 'test.dat')
 
