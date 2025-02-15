@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+### Changed
+
+### Removed
+
+
+## [0.0.2] - 2025/02/15
+
+### Added
+
 - Add function to clean pystd options
 
 ### Changed
