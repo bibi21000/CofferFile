@@ -12,9 +12,12 @@ for encrypting files with Fernet, Nacl, ...
  - interface to compress/encrypt and decrypt/decompress (with pyzstd) in stream mode
  - look at BENCHMARK.md ... and chain :)
 
+If you're looking for a more powerfull storage for your sensible datas,
+look at PyCoffer : https://github.com/bibi21000/PyCoffer.
+
 This is the main library.
 Look at https://github.com/bibi21000/NaclFile, https://github.com/bibi21000/FernetFile
-and https://github.com/bibi21000/PyCoffer for implementations with cryptograhics tools.
+for implementations with cryptograhics tools.
 
 Look at documentation : https://bibi21000.github.io/CofferFile.
 

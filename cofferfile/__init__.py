@@ -15,10 +15,7 @@ import builtins
 import io
 import logging
 
-if sys.version_info < (3, 10):
-    from importlib_metadata import entry_points  # noqa
-else:
-    from importlib.metadata import entry_points  # noqa
+from cofferfile.decorator import reify
 
 __all__ = ["EncryptFile", "Cryptor", "_open_t", "_open_cls"]
 
@@ -483,12 +480,22 @@ class EncryptFile(BaseStream):
         return '<EncryptFile ' + s[1:-1] + ' ' + hex(id(self)) + '>'
 
     @classmethod
+    @reify
+    def _imp_metadata(cls):
+        """Lazy loader for metadata"""
+        import importlib
+        if sys.version_info < (3, 10):
+            return importlib.import_module('importlib_metadata')
+        else:
+            return importlib.import_module('importlib.metadata')
+
+    @classmethod
     def cryptor_factory(self, name=None):
         """"""
         if name is None:
-            return entry_points(group='cofferfile.cryptor')
+            return self._imp_metadata.entry_points(group='cofferfile.cryptor')
         else:
-            crpt = entry_points(group='cofferfile.cryptor', name=name)
+            crpt = self._imp_metadata.entry_points(group='cofferfile.cryptor', name=name)
             if len(crpt) != 1:
                 raise IndexError("Problem loading %s : found %s matches"%(name, len(crpt)))
             return tuple(crpt)[0].load()
