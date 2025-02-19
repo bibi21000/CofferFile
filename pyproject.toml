@@ -1,6 +1,6 @@
 [project]
 name = "cofferfile"
-version = "0.0.3"
+version = "0.0.4"
 requires-python = ">= 3.9"
 readme = "README.md"
 description = "A python xxxFile like (ie GzipFile, BZ2File, ...) for manipulating encrypted files (Fernet, Nacl, ...)."
