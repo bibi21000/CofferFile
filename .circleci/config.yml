@@ -61,6 +61,7 @@ jobs:
             pip install .
             pip install fernetfile@git+https://github.com/bibi21000/FernetFile
             pip install naclfile@git+https://github.com/bibi21000/NaclFile
+            pip install aesfile@git+https://github.com/bibi21000/AesFile
             pip install pycoffer@git+https://github.com/bibi21000/PyCoffer
             pip install .[zstd]
             pip install .[aes]
