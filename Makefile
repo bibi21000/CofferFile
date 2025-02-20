@@ -20,6 +20,7 @@ venv:
 	./venv/bin/pip install .[cli]
 	./venv/bin/pip install ../FernetFile -e .
 	./venv/bin/pip install ../NaclFile -e .
+	./venv/bin/pip install ../AesFile -e .
 	./venv/bin/pip install ../PyCoffer -e .
 
 build:
@@ -60,6 +61,12 @@ tests/test_naclfile_pynacl.py:
 	cd tests && ln -s ../../NaclFile/tests/test_tar.py test_naclfile_tar.py
 	cd tests && ln -s ../../NaclFile/tests/test_zstd.py test_naclfile_zstd.py
 	cd tests && ln -s ../../NaclFile/tests/test_small_files.py test_naclfile_small_files.py
+
+tests/test_aesfile_aes.py:
+	cd tests && ln -s ../../AesFile/tests/test_aes.py test_aesfile_pynacl.py
+	cd tests && ln -s ../../AesFile/tests/test_tar.py test_aesfile_tar.py
+	cd tests && ln -s ../../AesFile/tests/test_zstd.py test_aesfile_zstd.py
+	cd tests && ln -s ../../AesFile/tests/test_small_files.py test_aesfile_small_files.py
 
 tests/test_pycoffer_market.py:
 	cd tests && ln -s ../../PyCoffer/tests/test_market.py test_pycoffer_market.py

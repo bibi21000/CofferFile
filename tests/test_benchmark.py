@@ -14,6 +14,8 @@ from cryptography.fernet import Fernet
 from nacl import utils
 from nacl.secret import SecretBox
 
+from Crypto.Random import get_random_bytes
+
 import fernetfile
 
 import pytest
@@ -23,11 +25,16 @@ import naclfile
 from naclfile import NaclFile
 from naclfile.zstd import NaclFile as _ZstdNaclFile, open as naclz_open
 from naclfile.tar import TarFile as _TarZstdNaclFile
-from cofferfile.aes import AesFile
+from aesfile.aes import AesFile
+from aesfile.zstd import AesFile as _ZstdAesFile, open as aesz_open
+from aesfile.tar import TarFile as _TarZstdAesFile
 from fernetfile.tar import TarFile as _TarZstdFernetFile
 from .test_chain import Bz2FernetFile, LzmaFernetFile, TarBz2FernetFile, TarLzmaFernetFile
 
 class ZstdFernetFile(_ZstdFernetFile):
+    pass
+
+class TarZstdFernetFile(_TarZstdFernetFile):
     pass
 
 class ZstdNaclFile(_ZstdNaclFile):
@@ -36,7 +43,10 @@ class ZstdNaclFile(_ZstdNaclFile):
 class TarZstdNaclFile(_TarZstdNaclFile):
     pass
 
-class TarZstdFernetFile(_TarZstdFernetFile):
+class ZstdAesFile(_ZstdAesFile):
+    pass
+
+class TarZstdAesFile(_TarZstdAesFile):
     pass
 
 try:
@@ -108,6 +118,10 @@ def test_benchmark_general_header(random_path):
     (ZstdNaclFile, 'genindex-all.html', 1024 * 16, 0),
     (ZstdNaclFile, 'searchindex.js', 1024 * 16, 0),
     (ZstdNaclFile, 'library.pdf', 1024 * 16, 0),
+    (ZstdAesFile, 'download.html', 1024 * 16, 0),
+    (ZstdAesFile, 'genindex-all.html', 1024 * 16, 0),
+    (ZstdAesFile, 'searchindex.js', 1024 * 16, 0),
+    (ZstdAesFile, 'library.pdf', 1024 * 16, 0),
     # ~ (ZstdFernetFile, 'rand', 1024 * 16, 1024 * 1024 * 1),
     # ~ (ZstdFernetFile, 'rand', 1024 * 16, 1024 * 1024 * 10),
     # ~ (ZstdFernetFile, 'rand', 1024 * 16, 1024 * 1024 * 100),
@@ -152,6 +166,10 @@ def test_benchmark_general_header(random_path):
     (ZstdNaclFile, 'genindex-all.html', 1024 * 64, 0),
     (ZstdNaclFile, 'searchindex.js', 1024 * 64, 0),
     (ZstdNaclFile, 'library.pdf', 1024 * 64, 0),
+    (ZstdAesFile, 'download.html', 1024 * 64, 0),
+    (ZstdAesFile, 'genindex-all.html', 1024 * 64, 0),
+    (ZstdAesFile, 'searchindex.js', 1024 * 64, 0),
+    (ZstdAesFile, 'library.pdf', 1024 * 64, 0),
     (DummyFile, 'download.html', 1024 * 256, 0),
     (DummyFile, 'genindex-all.html', 1024 * 256, 0),
     (DummyFile, 'searchindex.js', 1024 * 256, 0),
@@ -190,6 +208,10 @@ def test_benchmark_general_header(random_path):
     (ZstdNaclFile, 'genindex-all.html', 1024 * 256, 0),
     (ZstdNaclFile, 'searchindex.js', 1024 * 256, 0),
     (ZstdNaclFile, 'library.pdf', 1024 * 256, 0),
+    (ZstdAesFile, 'download.html', 1024 * 256, 0),
+    (ZstdAesFile, 'genindex-all.html', 1024 * 256, 0),
+    (ZstdAesFile, 'searchindex.js', 1024 * 256, 0),
+    (ZstdAesFile, 'library.pdf', 1024 * 256, 0),
     # ~ (ZstdFernetFile, 'rand', 1024 * 256, 1024 * 1024 * 1),
     # ~ (ZstdFernetFile, 'rand', 1024 * 256, 1024 * 1024 * 10),
     # ~ (ZstdFernetFile, 'rand', 1024 * 256, 1024 * 1024 * 100),
@@ -234,6 +256,10 @@ def test_benchmark_general_header(random_path):
     (ZstdNaclFile, 'genindex-all.html', 1024 * 1024, 0),
     (ZstdNaclFile, 'searchindex.js', 1024 * 1024, 0),
     (ZstdNaclFile, 'library.pdf', 1024 * 1024, 0),
+    (ZstdAesFile, 'download.html', 1024 * 1024, 0),
+    (ZstdAesFile, 'genindex-all.html', 1024 * 1024, 0),
+    (ZstdAesFile, 'searchindex.js', 1024 * 1024, 0),
+    (ZstdAesFile, 'library.pdf', 1024 * 1024, 0),
 ])
 def test_benchmark_general(random_path, fcls, dt, buff_size, file_size):
     if fcls == NaclFile or fcls == ZstdNaclFile:
@@ -242,8 +268,7 @@ def test_benchmark_general(random_path, fcls, dt, buff_size, file_size):
         }
     elif fcls == AesFile:
         params = {
-            'key': b'Sixteen byte keySixteen byte key',
-            'iv': b'Sixteen byte key',
+            'aes_key': get_random_bytes(16),
         }
     elif fcls == DummyFile:
         params = {
