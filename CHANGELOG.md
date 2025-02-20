@@ -11,9 +11,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- Lazy loader for entrypoints
-
 ### Removed
+
+
+## [0.0.5] - 2025/02/20
+
+### Changed
+
+- Lazy loader for entrypoints
+- Move AES to a separate package
 
 
 ## [0.0.2] - 2025/02/15
