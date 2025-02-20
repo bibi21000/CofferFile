@@ -315,6 +315,9 @@ def test_benchmark_general(random_path, fcls, dt, buff_size, file_size):
     (TarZstdNaclFile, 'html,js and pdf', 1024 * 16, 0),
     (TarZstdNaclFile, 'html,js and pdf', 1024 * 256, 0),
     (TarZstdNaclFile, 'html,js and pdf', 1024 * 1024, 0),
+    (TarZstdAesFile, 'html,js and pdf', 1024 * 16, 0),
+    (TarZstdAesFile, 'html,js and pdf', 1024 * 256, 0),
+    (TarZstdAesFile, 'html,js and pdf', 1024 * 1024, 0),
     (TarZstdFernetFile, 'html,js and pdf', 1024 * 16, 0),
     (TarZstdFernetFile, 'html,js and pdf', 1024 * 256, 0),
     (TarZstdFernetFile, 'html,js and pdf', 1024 * 1024, 0),
@@ -331,10 +334,9 @@ def test_benchmark_tar(random_path, fcls, dt, buff_size, file_size):
         }
     elif fcls == tarfile.TarFile:
         params = { }
-    elif fcls == AesFile:
+    elif fcls == TarZstdAesFile:
         params = {
-            'key': b'Sixteen byte keySixteen byte key',
-            'iv': b'Sixteen byte key',
+            'aes_key': get_random_bytes(16),
             'chunk_size': buff_size,
         }
     else:
