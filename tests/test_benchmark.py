@@ -266,7 +266,7 @@ def test_benchmark_general(random_path, fcls, dt, buff_size, file_size):
         params = {
             'secret_key': utils.random(SecretBox.KEY_SIZE)
         }
-    elif fcls == AesFile:
+    elif fcls == AesFile or fcls == ZstdAesFile:
         params = {
             'aes_key': get_random_bytes(16),
         }
