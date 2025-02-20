@@ -13,13 +13,11 @@ import tarfile
 from cryptography.fernet import Fernet
 from nacl import utils
 from nacl.secret import SecretBox
-
 from Crypto.Random import get_random_bytes
-
-import fernetfile
 
 import pytest
 from .conftest import DummyFile
+import fernetfile
 from fernetfile.zstd import FernetFile as _ZstdFernetFile, CParameter, open as zstd_open
 import naclfile
 from naclfile import NaclFile
