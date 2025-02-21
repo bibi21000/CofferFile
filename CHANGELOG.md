@@ -9,11 +9,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
- - Add key derivation function
-
 ### Changed
 
 ### Removed
+
+
+## [0.0.6] - 2025/02/20
+
+### Added
+
+ - Add key derivation function (experimental)
 
 
 ## [0.0.5] - 2025/02/20
