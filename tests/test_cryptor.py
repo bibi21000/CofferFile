@@ -9,7 +9,6 @@ from cofferfile import Cryptor
 
 import pytest
 
-
 def test_cryptor(random_path, random_name):
     cryptor = Cryptor()
     derive = cryptor.derive('test')

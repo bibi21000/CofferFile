@@ -269,7 +269,9 @@ class Cryptor():
         """
         if salt is None:
             salt = self._imp_secrets.token_bytes(16)
-        return self._imp_hashlib.pbkdf2_hmac('sha256', bytes(password,'utf-8'),
+        if isinstance(password, str):
+            password = password.encode()
+        return self._imp_hashlib.pbkdf2_hmac('sha256', password,
             salt, iterations, dklen=key_len)
 
     def _encrypt(self, chunk):
