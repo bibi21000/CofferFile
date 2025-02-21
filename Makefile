@@ -13,11 +13,12 @@ venv:
 	./venv/bin/pip install .[test]
 	./venv/bin/pip install .[build]
 	./venv/bin/pip install .[doc]
-	./venv/bin/pip install .[zstd]
-	./venv/bin/pip install .[store]
-	./venv/bin/pip install .[pynacl]
-	./venv/bin/pip install .[aes]
-	./venv/bin/pip install .[cli]
+#~ 	./venv/bin/pip install .[zstd]
+#~ 	./venv/bin/pip install .[store]
+#~ 	./venv/bin/pip install .[fernet]
+#~ 	./venv/bin/pip install .[pynacl]
+#~ 	./venv/bin/pip install .[aes]
+#~ 	./venv/bin/pip install .[cli]
 	./venv/bin/pip install ../FernetFile -e .
 	./venv/bin/pip install ../NaclFile -e .
 	./venv/bin/pip install ../AesFile -e .
@@ -52,18 +53,21 @@ benchmark:
 
 tests/test_fernetfile_fernet.py:
 	cd tests && ln -s ../../FernetFile/tests/test_fernet.py test_fernetfile_fernet.py
+	cd tests && ln -s ../../FernetFile/tests/test_cryptor.py test_fernetfile_cryptor.py
 	cd tests && ln -s ../../FernetFile/tests/test_tar.py test_fernetfile_tar.py
 	cd tests && ln -s ../../FernetFile/tests/test_zstd.py test_fernetfile_zstd.py
 	cd tests && ln -s ../../FernetFile/tests/test_small_files.py test_fernetfile_small_files.py
 
 tests/test_naclfile_pynacl.py:
 	cd tests && ln -s ../../NaclFile/tests/test_pynacl.py test_naclfile_pynacl.py
+	cd tests && ln -s ../../NaclFile/tests/test_cryptor.py test_naclfile_cryptor.py
 	cd tests && ln -s ../../NaclFile/tests/test_tar.py test_naclfile_tar.py
 	cd tests && ln -s ../../NaclFile/tests/test_zstd.py test_naclfile_zstd.py
 	cd tests && ln -s ../../NaclFile/tests/test_small_files.py test_naclfile_small_files.py
 
 tests/test_aesfile_aes.py:
-	cd tests && ln -s ../../AesFile/tests/test_aes.py test_aesfile_pynacl.py
+	cd tests && ln -s ../../AesFile/tests/test_aes.py test_aesfile_aes.py
+	cd tests && ln -s ../../AesFile/tests/test_cryptor.py test_aesfile_cryptor.py
 	cd tests && ln -s ../../AesFile/tests/test_tar.py test_aesfile_tar.py
 	cd tests && ln -s ../../AesFile/tests/test_zstd.py test_aesfile_zstd.py
 	cd tests && ln -s ../../AesFile/tests/test_small_files.py test_aesfile_small_files.py

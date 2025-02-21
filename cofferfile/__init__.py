@@ -249,12 +249,33 @@ class Cryptor():
         self.pos = 0
         log.debug("Cryptor initialized")
 
+    @classmethod
+    @reify
+    def _imp_hashlib(cls):
+        """Lazy loader for hashlib"""
+        import importlib
+        return importlib.import_module('hashlib')
+
+    @classmethod
+    @reify
+    def _imp_secrets(cls):
+        """Lazy loader for secrets
+        """
+        import importlib
+        return importlib.import_module('secrets')
+
+    def derive(self, password, salt=None, key_len=64, iterations=500000):
+        """Derive a key from password (experimental)
+        """
+        if salt is None:
+            salt = self._imp_secrets.token_bytes(16)
+        return self._imp_hashlib.pbkdf2_hmac('sha256', bytes(password,'utf-8'), salt, iterations, dklen=key_len)
+
     def _encrypt(self, chunk):
         return chunk
 
     def encode_meta(self, chunk_size):
         """Always return 32 (META_SIZE) bytes string
-        Bug !!! need more tests
         """
         ret = b''
         ret += struct.pack('<I', chunk_size)
