@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 
 
+## [0.0.7] - 2025/02/20
+
+### Changed
+
+ - Update key derivation function (experimental)
+
+
 ## [0.0.6] - 2025/02/20
 
 ### Added
