@@ -393,3 +393,42 @@ def test_DummyFile(random_path, random_name):
     assert data == datar
 
 
+def test_append(random_path, random_name):
+    key = Fernet.generate_key()
+    data = randbytes(1784) + b'0111110' + randbytes(3594) + b'0100010' + randbytes(2145)
+    dataap = randbytes(2715)
+    dataf = os.path.join(random_path, 'test_seek_%s.frnt'%random_name)
+
+    with fernetfile.open(dataf, mode='wb', fernet_key=key) as ff:
+        assert ff.fileno() is not None
+        ff.write(data)
+        assert ff.writable()
+        assert not ff.readable()
+        with pytest.raises(OSError):
+            ff.rewind()
+        with pytest.raises(OSError):
+            ff.seek(0, whence=io.SEEK_SET)
+        ff.seek(0, whence=io.SEEK_CUR)
+
+    with fernetfile.open(dataf, mode='ab', fernet_key=key) as ff:
+        ff.write(dataap)
+
+    with fernetfile.open(dataf, "rb", fernet_key=key) as ff:
+        assert ff.fileno() is not None
+        assert ff.readable()
+        assert not ff.writable()
+        datar = ff.read()
+        assert data + dataap == datar
+        ff.rewind()
+        # ~ assert ff.offset == 0
+        datar = ff.read()
+        assert data + dataap == datar
+        ff.seek(1784, whence=io.SEEK_SET)
+        datar = ff.read(size=7)
+        assert b'0111110' == datar
+        ff.seek(3594, whence=io.SEEK_CUR)
+        datar = ff.read(size=7)
+        assert b'0100010' == datar
+        ff.seek(2145, whence=io.SEEK_CUR)
+        datar = ff.read(size=3715)
+        assert dataap == datar
