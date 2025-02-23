@@ -16,8 +16,8 @@ If you're looking for a more powerfull storage for your sensible datas,
 look at PyCoffer : https://github.com/bibi21000/PyCoffer.
 
 This is the main library.
-Look at https://github.com/bibi21000/NaclFile, https://github.com/bibi21000/FernetFile
-or https://github.com/bibi21000/AesFile for implementations with cryptograhics tools.
+Look at https://github.com/bibi21000/NaclFile, https://github.com/bibi21000/FernetFile,
+https://github.com/bibi21000/TinkFile or https://github.com/bibi21000/AesFile for implementations with cryptograhics tools.
 
 Look at documentation : https://bibi21000.github.io/CofferFile.
 

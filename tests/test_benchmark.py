@@ -14,6 +14,9 @@ from cryptography.fernet import Fernet
 from nacl import utils
 from nacl.secret import SecretBox
 from Crypto.Random import get_random_bytes
+import tink
+from tink import aead
+from tink import secret_key_access
 
 import pytest
 from .conftest import DummyFile
@@ -26,6 +29,9 @@ from naclfile.tar import TarFile as _TarZstdNaclFile
 from aesfile import AesFile
 from aesfile.zstd import AesFile as _ZstdAesFile, open as aesz_open
 from aesfile.tar import TarFile as _TarZstdAesFile
+from tinkfile import TinkFile
+from tinkfile.zstd import TinkFile as _ZstdTinkFile, open as tinkz_open
+from tinkfile.tar import TarFile as _TarZstdTinkFile
 from fernetfile.tar import TarFile as _TarZstdFernetFile
 from .test_chain import Bz2FernetFile, LzmaFernetFile, TarBz2FernetFile, TarLzmaFernetFile
 
@@ -47,12 +53,20 @@ class ZstdAesFile(_ZstdAesFile):
 class TarZstdAesFile(_TarZstdAesFile):
     pass
 
+class ZstdTinkFile(_ZstdTinkFile):
+    pass
+
+class TarZstdTinkFile(_TarZstdTinkFile):
+    pass
+
 try:
     import pytest_ordering
     DO = True
     # ~ DO = False
 except ModuleNotFoundError:
     DO = False
+
+aead.register()
 
 # ~ @pytest.mark.skip("Manual test")
 @pytest.mark.skipif(not DO, reason="requires the pytest_ordering package")
@@ -94,6 +108,10 @@ def test_benchmark_general_header(random_path):
     (AesFile, 'genindex-all.html', 1024 * 16, 0),
     (AesFile, 'searchindex.js', 1024 * 16, 0),
     (AesFile, 'library.pdf', 1024 * 16, 0),
+    (TinkFile, 'download.html', 1024 * 16, 0),
+    (TinkFile, 'genindex-all.html', 1024 * 16, 0),
+    (TinkFile, 'searchindex.js', 1024 * 16, 0),
+    (TinkFile, 'library.pdf', 1024 * 16, 0),
     # ~ (fernetfile.FernetFile, 'rand', 1024 * 16, 1024 * 1024 * 1),
     # ~ (fernetfile.FernetFile, 'rand', 1024 * 16, 1024 * 1024 * 10),
     # ~ (fernetfile.FernetFile, 'rand', 1024 * 16, 1024 * 1024 * 100),
@@ -120,6 +138,10 @@ def test_benchmark_general_header(random_path):
     (ZstdAesFile, 'genindex-all.html', 1024 * 16, 0),
     (ZstdAesFile, 'searchindex.js', 1024 * 16, 0),
     (ZstdAesFile, 'library.pdf', 1024 * 16, 0),
+    (ZstdTinkFile, 'download.html', 1024 * 16, 0),
+    (ZstdTinkFile, 'genindex-all.html', 1024 * 16, 0),
+    (ZstdTinkFile, 'searchindex.js', 1024 * 16, 0),
+    (ZstdTinkFile, 'library.pdf', 1024 * 16, 0),
     # ~ (ZstdFernetFile, 'rand', 1024 * 16, 1024 * 1024 * 1),
     # ~ (ZstdFernetFile, 'rand', 1024 * 16, 1024 * 1024 * 10),
     # ~ (ZstdFernetFile, 'rand', 1024 * 16, 1024 * 1024 * 100),
@@ -148,6 +170,10 @@ def test_benchmark_general_header(random_path):
     (AesFile, 'genindex-all.html', 1024 * 64, 0),
     (AesFile, 'searchindex.js', 1024 * 64, 0),
     (AesFile, 'library.pdf', 1024 * 64, 0),
+    (TinkFile, 'download.html', 1024 * 64, 0),
+    (TinkFile, 'genindex-all.html', 1024 * 64, 0),
+    (TinkFile, 'searchindex.js', 1024 * 64, 0),
+    (TinkFile, 'library.pdf', 1024 * 64, 0),
     (Bz2FernetFile, 'download.html', 1024 * 64, 0),
     (Bz2FernetFile, 'genindex-all.html', 1024 * 64, 0),
     (Bz2FernetFile, 'searchindex.js', 1024 * 64, 0),
@@ -168,6 +194,10 @@ def test_benchmark_general_header(random_path):
     (ZstdAesFile, 'genindex-all.html', 1024 * 64, 0),
     (ZstdAesFile, 'searchindex.js', 1024 * 64, 0),
     (ZstdAesFile, 'library.pdf', 1024 * 64, 0),
+    (ZstdTinkFile, 'download.html', 1024 * 64, 0),
+    (ZstdTinkFile, 'genindex-all.html', 1024 * 64, 0),
+    (ZstdTinkFile, 'searchindex.js', 1024 * 64, 0),
+    (ZstdTinkFile, 'library.pdf', 1024 * 64, 0),
     (DummyFile, 'download.html', 1024 * 256, 0),
     (DummyFile, 'genindex-all.html', 1024 * 256, 0),
     (DummyFile, 'searchindex.js', 1024 * 256, 0),
@@ -184,6 +214,10 @@ def test_benchmark_general_header(random_path):
     (AesFile, 'genindex-all.html', 1024 * 256, 0),
     (AesFile, 'searchindex.js', 1024 * 256, 0),
     (AesFile, 'library.pdf', 1024 * 256, 0),
+    (TinkFile, 'download.html', 1024 * 256, 0),
+    (TinkFile, 'genindex-all.html', 1024 * 256, 0),
+    (TinkFile, 'searchindex.js', 1024 * 256, 0),
+    (TinkFile, 'library.pdf', 1024 * 256, 0),
     # ~ (fernetfile.FernetFile, 'rand', 1024 * 256, 1024 * 1024 * 1),
     # ~ (fernetfile.FernetFile, 'rand', 1024 * 256, 1024 * 1024 * 10),
     # ~ (fernetfile.FernetFile, 'rand', 1024 * 256, 1024 * 1024 * 100),
@@ -210,6 +244,10 @@ def test_benchmark_general_header(random_path):
     (ZstdAesFile, 'genindex-all.html', 1024 * 256, 0),
     (ZstdAesFile, 'searchindex.js', 1024 * 256, 0),
     (ZstdAesFile, 'library.pdf', 1024 * 256, 0),
+    (ZstdTinkFile, 'download.html', 1024 * 256, 0),
+    (ZstdTinkFile, 'genindex-all.html', 1024 * 256, 0),
+    (ZstdTinkFile, 'searchindex.js', 1024 * 256, 0),
+    (ZstdTinkFile, 'library.pdf', 1024 * 256, 0),
     # ~ (ZstdFernetFile, 'rand', 1024 * 256, 1024 * 1024 * 1),
     # ~ (ZstdFernetFile, 'rand', 1024 * 256, 1024 * 1024 * 10),
     # ~ (ZstdFernetFile, 'rand', 1024 * 256, 1024 * 1024 * 100),
@@ -238,6 +276,10 @@ def test_benchmark_general_header(random_path):
     (AesFile, 'genindex-all.html', 1024 * 1024, 0),
     (AesFile, 'searchindex.js', 1024 * 1024, 0),
     (AesFile, 'library.pdf', 1024 * 1024, 0),
+    (TinkFile, 'download.html', 1024 * 1024, 0),
+    (TinkFile, 'genindex-all.html', 1024 * 1024, 0),
+    (TinkFile, 'searchindex.js', 1024 * 1024, 0),
+    (TinkFile, 'library.pdf', 1024 * 1024, 0),
     (Bz2FernetFile, 'download.html', 1024 * 1024, 0),
     (Bz2FernetFile, 'genindex-all.html', 1024 * 1024, 0),
     (Bz2FernetFile, 'searchindex.js', 1024 * 1024, 0),
@@ -258,6 +300,10 @@ def test_benchmark_general_header(random_path):
     (ZstdAesFile, 'genindex-all.html', 1024 * 1024, 0),
     (ZstdAesFile, 'searchindex.js', 1024 * 1024, 0),
     (ZstdAesFile, 'library.pdf', 1024 * 1024, 0),
+    (ZstdTinkFile, 'download.html', 1024 * 1024, 0),
+    (ZstdTinkFile, 'genindex-all.html', 1024 * 1024, 0),
+    (ZstdTinkFile, 'searchindex.js', 1024 * 1024, 0),
+    (ZstdTinkFile, 'library.pdf', 1024 * 1024, 0),
 ])
 def test_benchmark_general(random_path, fcls, dt, buff_size, file_size):
     if fcls == NaclFile or fcls == ZstdNaclFile:
@@ -267,6 +313,14 @@ def test_benchmark_general(random_path, fcls, dt, buff_size, file_size):
     elif fcls == AesFile or fcls == ZstdAesFile:
         params = {
             'aes_key': get_random_bytes(16),
+        }
+    elif fcls == TinkFile or fcls == ZstdTinkFile:
+        key_template = aead.aead_key_templates.AES128_GCM
+        keyset_handle = tink.new_keyset_handle(key_template)
+        params = {
+            'tink_key': tink.json_proto_keyset_format.serialize(
+                keyset_handle, secret_key_access.TOKEN
+            ),
         }
     elif fcls == DummyFile:
         params = {
@@ -316,6 +370,9 @@ def test_benchmark_general(random_path, fcls, dt, buff_size, file_size):
     (TarZstdAesFile, 'html,js and pdf', 1024 * 16, 0),
     (TarZstdAesFile, 'html,js and pdf', 1024 * 256, 0),
     (TarZstdAesFile, 'html,js and pdf', 1024 * 1024, 0),
+    (TarZstdTinkFile, 'html,js and pdf', 1024 * 16, 0),
+    (TarZstdTinkFile, 'html,js and pdf', 1024 * 256, 0),
+    (TarZstdTinkFile, 'html,js and pdf', 1024 * 1024, 0),
     (TarZstdFernetFile, 'html,js and pdf', 1024 * 16, 0),
     (TarZstdFernetFile, 'html,js and pdf', 1024 * 256, 0),
     (TarZstdFernetFile, 'html,js and pdf', 1024 * 1024, 0),
@@ -332,6 +389,14 @@ def test_benchmark_tar(random_path, fcls, dt, buff_size, file_size):
         }
     elif fcls == tarfile.TarFile:
         params = { }
+    elif fcls == TarZstdTinkFile:
+        key_template = aead.aead_key_templates.AES128_GCM
+        keyset_handle = tink.new_keyset_handle(key_template)
+        params = {
+            'tink_key': tink.json_proto_keyset_format.serialize(
+                keyset_handle, secret_key_access.TOKEN
+            ),
+        }
     elif fcls == TarZstdAesFile:
         params = {
             'aes_key': get_random_bytes(16),

@@ -22,6 +22,7 @@ venv:
 	./venv/bin/pip install ../FernetFile -e .
 	./venv/bin/pip install ../NaclFile -e .
 	./venv/bin/pip install ../AesFile -e .
+	./venv/bin/pip install ../TinkFile -e .
 	./venv/bin/pip install ../PyCoffer -e .
 
 build:
@@ -32,7 +33,7 @@ testpypi:
 	./venv/bin/python3 -m twine upload --repository testpypi --verbose dist/*
 
 doc:
-	./venv/bin/pdoc --output-directory docs cofferfile/aes.py cofferfile/decorator.py cofferfile/__init__.py
+	./venv/bin/pdoc --output-directory docs cofferfile/decorator.py cofferfile/zstd.py cofferfile/__init__.py
 
 pypi:
 	./venv/bin/python3 -m twine upload --repository pypi --verbose dist/*
@@ -71,6 +72,13 @@ tests/test_aesfile_aes.py:
 	cd tests && ln -s ../../AesFile/tests/test_tar.py test_aesfile_tar.py
 	cd tests && ln -s ../../AesFile/tests/test_zstd.py test_aesfile_zstd.py
 	cd tests && ln -s ../../AesFile/tests/test_small_files.py test_aesfile_small_files.py
+
+tests/test_tinkfile_tink.py:
+	cd tests && ln -s ../../TinkFile/tests/test_tink.py test_tinkfile_tink.py
+	cd tests && ln -s ../../TinkFile/tests/test_cryptor.py test_tinkfile_cryptor.py
+	cd tests && ln -s ../../TinkFile/tests/test_tar.py test_tinkfile_tar.py
+	cd tests && ln -s ../../TinkFile/tests/test_zstd.py test_tinkfile_zstd.py
+	cd tests && ln -s ../../TinkFile/tests/test_small_files.py test_tinkfile_small_files.py
 
 tests/test_pycoffer_market.py:
 	cd tests && ln -s ../../PyCoffer/tests/test_market.py test_pycoffer_market.py
