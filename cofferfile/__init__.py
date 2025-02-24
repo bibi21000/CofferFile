@@ -311,12 +311,6 @@ class Cryptor():
                 break
             enc = self._encrypt(chunk)
             self._marks += 1
-            # ~ log.debug("len enc %s, chunk size %s" %
-                # ~ (len(enc), self.chunk_size))
-            # ~ ret += struct.pack('<I', len(enc))
-            # ~ # We add blank data for later
-            # ~ for i in range(META_RESERV):
-                # ~ ret += struct.pack('<I', 0)
             ret += self.encode_meta(len(enc))
             ret += enc
             if len(chunk) < self.chunk_size:
@@ -350,21 +344,14 @@ class Cryptor():
             self.unused_data = None
         while True:
             size_data = self.decode_meta(data[beg:])
-            # ~ size_meta = data[beg:beg + META_SIZE]
-            # ~ size_struct = data[beg:beg + META_CHUNK]
-            # ~ if len(size_struct) == 0:
             if size_data == -1:
                 # ~ log.debug('len %s'%len(size_struct))
                 self.needs_input = False
                 self.eof = True
                 break
             if size_data == -2:
-            # ~ if len(size_struct) < META_CHUNK:
                 self.unused_data = data[beg:]
                 break
-            # ~ size_data = struct.unpack('<I', size_struct)[0]
-            # ~ size_data2 = self.decode_meta(data[beg:])
-            # ~ print(size_data, ' = ', size_data2)
             chunk = data[beg + META_SIZE:beg + META_SIZE + size_data]
 
             if len(chunk) < size_data:
