@@ -4,6 +4,7 @@
 ifndef PYTHON
 PYTHON:=python3
 endif
+VERSION := $(shell grep -m 1 version pyproject.toml | tr -s ' ' | tr -d '"' | tr -d "'" | cut -d' ' -f3)
 
 .PHONY: venv tests
 
@@ -49,7 +50,7 @@ tests:
 	./venv/bin/pytest  --random-order -n auto --ignore=tests/test_benchmark.py tests/
 
 benchmark:
-#~ 	./venv/bin/pip install .[benchmark]
+	./venv/bin/pip install .[benchmark]
 	./venv/bin/pytest tests/test_benchmark.py
 
 tests/test_fernetfile_fernet.py:
@@ -85,3 +86,6 @@ tests/test_pycoffer_market.py:
 	cd tests && ln -s ../../PyCoffer/tests/test_bank.py test_pycoffer_bank.py
 	cd tests && ln -s ../../PyCoffer/tests/test_store.py test_pycoffer_store.py
 	cd tests && ln -s ../../PyCoffer/tests/test_coffer.py test_pycoffer_coffer.py
+
+release:
+	gh release create v${VERSION}
