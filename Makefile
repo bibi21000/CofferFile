@@ -88,4 +88,5 @@ tests/test_pycoffer_market.py:
 	cd tests && ln -s ../../PyCoffer/tests/test_coffer.py test_pycoffer_coffer.py
 
 release:
+	-git push
 	gh release create v${VERSION}
