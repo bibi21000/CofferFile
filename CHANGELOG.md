@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+### Changed
+
+### Removed
+
+
+## [0.0.8] - 2025/02/24
+
+### Added
+
  - Add benchmark for Tink
 
 ### Changed
