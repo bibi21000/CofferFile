@@ -120,8 +120,8 @@ workflows:
       - build-and-test:
           matrix:
             parameters:
-                python : ['3.9', '3.10', '3.11', '3.13']
-                #~ python : ['3.9', '3.10', '3.11']
+                #~ python : ['3.9', '3.10', '3.11', '3.13']
+                python : ['3.9', '3.10', '3.11']
       - build-and-cov:
           matrix:
             parameters:
