@@ -264,6 +264,7 @@ class Cryptor():
         import importlib
         return importlib.import_module('secrets')
 
+    @classmethod
     def derive(self, password, salt=None, key_len=64, iterations=500000):
         """Derive a key from password (experimental)
         """
