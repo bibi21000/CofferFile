@@ -35,6 +35,7 @@ try:
     from tinkfile import TinkFile
     from tinkfile.zstd import TinkFile as _ZstdTinkFile, open as tinkz_open
     from tinkfile.tar import TarFile as _TarZstdTinkFile
+    aead.register()
 except ImportError:
     class TinkFile():
         pass
@@ -78,7 +79,6 @@ try:
 except ModuleNotFoundError:
     DO = False
 
-aead.register()
 
 # ~ @pytest.mark.skip("Manual test")
 @pytest.mark.skipif(not DO, reason="requires the pytest_ordering package")
