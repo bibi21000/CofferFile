@@ -30,7 +30,7 @@ jobs:
             pip install fernetfile@git+https://github.com/bibi21000/FernetFile
             pip install naclfile@git+https://github.com/bibi21000/NaclFile
             pip install aesfile@git+https://github.com/bibi21000/AesFile
-            pip install tinkfile@git+https://github.com/bibi21000/TinkFile
+            #~ pip install tinkfile@git+https://github.com/bibi21000/TinkFile
             pip install pycoffer@git+https://github.com/bibi21000/PyCoffer
             pip install .[test]
             pip install codecov-cli
@@ -59,7 +59,7 @@ jobs:
             pip install fernetfile@git+https://github.com/bibi21000/FernetFile
             pip install naclfile@git+https://github.com/bibi21000/NaclFile
             pip install aesfile@git+https://github.com/bibi21000/AesFile
-            pip install tinkfile@git+https://github.com/bibi21000/TinkFile
+            #~ pip install tinkfile@git+https://github.com/bibi21000/TinkFile
             pip install pycoffer@git+https://github.com/bibi21000/PyCoffer
             pip install .[test]
             pip install codecov-cli
