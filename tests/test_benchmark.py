@@ -14,10 +14,12 @@ from cryptography.fernet import Fernet
 from nacl import utils
 from nacl.secret import SecretBox
 from Crypto.Random import get_random_bytes
-import tink
-from tink import aead
-from tink import secret_key_access
-
+try:
+    import tink
+    from tink import aead
+    from tink import secret_key_access
+except ImportError:
+    pass
 import pytest
 from .conftest import DummyFile
 import fernetfile
@@ -29,9 +31,12 @@ from naclfile.tar import TarFile as _TarZstdNaclFile
 from aesfile import AesFile
 from aesfile.zstd import AesFile as _ZstdAesFile, open as aesz_open
 from aesfile.tar import TarFile as _TarZstdAesFile
-from tinkfile import TinkFile
-from tinkfile.zstd import TinkFile as _ZstdTinkFile, open as tinkz_open
-from tinkfile.tar import TarFile as _TarZstdTinkFile
+try:
+    from tinkfile import TinkFile
+    from tinkfile.zstd import TinkFile as _ZstdTinkFile, open as tinkz_open
+    from tinkfile.tar import TarFile as _TarZstdTinkFile
+except ImportError:
+    pass
 from fernetfile.tar import TarFile as _TarZstdFernetFile
 from .test_chain import Bz2FernetFile, LzmaFernetFile, TarBz2FernetFile, TarLzmaFernetFile
 
