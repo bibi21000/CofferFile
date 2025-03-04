@@ -36,7 +36,14 @@ try:
     from tinkfile.zstd import TinkFile as _ZstdTinkFile, open as tinkz_open
     from tinkfile.tar import TarFile as _TarZstdTinkFile
 except ImportError:
-    pass
+    class TinkFile():
+        pass
+    class _ZstdTinkFile():
+        pass
+    class _TarZstdTinkFile():
+        pass
+    def tinkz_open():
+        pass
 from fernetfile.tar import TarFile as _TarZstdFernetFile
 from .test_chain import Bz2FernetFile, LzmaFernetFile, TarBz2FernetFile, TarLzmaFernetFile
 
