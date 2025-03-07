@@ -82,7 +82,7 @@ jobs:
       - codecov/upload
       - run:
           name: Upload tests result
-          command: codecovcli do-upload --report-type test_results --file pytest.<< parameters.python >>.junit.xml --file ruff.<< parameters.python --file pip-audit.<< parameters.python >>.junit.xml>>.junit.xml
+          command: codecovcli do-upload --report-type test_results --file pytest.<< parameters.python >>.junit.xml --file ruff.<< parameters.python >>.junit.xml --file pip-audit.<< parameters.python >>.junit.xml
 
   testpypi_publish:
     parameters:
