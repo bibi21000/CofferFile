@@ -42,6 +42,7 @@ jobs:
       - run:
           name: Run pip-audit
           command: |
+            pip-audit --requirement requirements-audit.txt --skip-editable --format junit
             pip-audit --requirement requirements-audit.txt --skip-editable --format junit >pip-audit.<< parameters.python >>.junit.xml
             cat requirements-audit.txt
             cat pip-audit.<< parameters.python >>.junit.xml
