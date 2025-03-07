@@ -265,15 +265,15 @@ class Cryptor():
         return importlib.import_module('secrets')
 
     @classmethod
-    def derive(self, password, salt=None, key_len=64, iterations=500000):
+    def derive(self, password, salt=None, key_len=32, N=2 ** 14, r=8, p=1, maxmem=0):
         """Derive a key from password (experimental)
         """
         if salt is None:
-            salt = self._imp_secrets.token_bytes(16)
+            salt = self._imp_secrets.token_bytes(32)
         if isinstance(password, str):
             password = password.encode()
-        return self._imp_hashlib.pbkdf2_hmac('sha256', password,
-            salt, iterations, dklen=key_len)
+        return salt, self._imp_hashlib.scrypt(password, salt=salt, n=N, r=r, p=p,
+            dklen=key_len, maxmem=maxmem)
 
     def _encrypt(self, chunk):
         return chunk
