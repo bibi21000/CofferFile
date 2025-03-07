@@ -42,7 +42,7 @@ jobs:
       - run:
           name: Run pip-audit
           command: |
-            pip-audit --requirement requirements-audit.txt --skip-editable --format junit >pip-audit.<< parameters.python >>.junit.xml || true
+            pip-audit --requirement requirements-audit.txt --skip-editable --format junit >pip-audit.<< parameters.python >>.junit.xml
             cat pip-audit.<< parameters.python >>.junit.xml
       - run:
           name: Run ruff
