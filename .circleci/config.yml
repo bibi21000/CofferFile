@@ -27,7 +27,7 @@ jobs:
           name: Install dependencies from pyproject.toml
           command: |
             pip install .
-            pip list --exclude-editable --format freeze > requirements-audit.txt
+            pip list --exclude-editable --format freeze >requirements-audit.txt
             pip install fernetfile@git+https://github.com/bibi21000/FernetFile
             pip install naclfile@git+https://github.com/bibi21000/NaclFile
             pip install aesfile@git+https://github.com/bibi21000/AesFile
@@ -43,6 +43,7 @@ jobs:
           name: Run pip-audit
           command: |
             pip-audit --requirement requirements-audit.txt --skip-editable --format junit >pip-audit.<< parameters.python >>.junit.xml
+            cat requirements-audit.txt
             cat pip-audit.<< parameters.python >>.junit.xml
       - run:
           name: Run ruff
