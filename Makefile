@@ -88,5 +88,6 @@ tests/test_pycoffer_market.py:
 	cd tests && ln -s ../../PyCoffer/tests/test_coffer.py test_pycoffer_coffer.py
 
 release:
+	-make doc && git commit -m "Update doc" docs/
 	-git push
 	gh release create v${VERSION}

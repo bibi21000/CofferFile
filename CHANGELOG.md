@@ -9,9 +9,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
- - Use scrypt in derivation function (experimental)
+### Changed
+
+### Removed
+
+## [0.0.8] - 2025/03/08
+
+### Added
 
 ### Changed
+
+ - Use scrypt in derivation function (experimental)
 
 ### Removed
 
