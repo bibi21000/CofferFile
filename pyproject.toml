@@ -1,6 +1,6 @@
 [project]
 name = "cofferfile"
-version = "0.0.9"
+version = "0.0.10"
 requires-python = ">= 3.9"
 readme = "README.md"
 description = "A python xxxFile like (ie GzipFile, BZ2File, ...) for manipulating encrypted files (Fernet, Nacl, ...)."
@@ -12,7 +12,7 @@ maintainers = [
 ]
 packages = ["cofferfile"]
 dependencies = [
-  'importlib_metadata == 4.6.4; python_version < "3.10"',
+  'importlib_metadata < 7; python_version < "3.10"',
 ]
 classifiers = [
   # How mature is this project? Common values are
@@ -24,6 +24,7 @@ classifiers = [
   # Indicate who your project is intended for
   "Intended Audience :: Developers",
   "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Security :: Cryptography",
 
   # Pick your license as you wish (see also "license" above)
   "License :: OSI Approved :: MIT License",
